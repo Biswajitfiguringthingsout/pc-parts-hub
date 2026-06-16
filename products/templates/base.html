@@ -1,0 +1,17 @@
+<!-- base.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PC Parts Hub</title>
+</head>
+<body>
+    {% load static %}
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <h1>PC Parts Hub</h1>
+    <hr>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
