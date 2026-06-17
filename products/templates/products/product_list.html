@@ -1,14 +1,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Products</h2>
 
-{% for product in products %}
-    <div>
-        <h3>{{ product.name }}</h3>
-        <p>₹{{ product.price }}</p>
-        <hr>
-    </div>
-{% endfor %}
+<h2>PC Components</h2>
+
+<div class="categories">
+    <a href="/products/">All</a>
+    <a href="/products/category/cpu/">CPU</a>
+    <a href="/products/category/gpu/">GPU</a>
+    <a href="/products/category/motherboard/">Motherboard</a>
+    <a href="/products/category/ram/">RAM</a>
+    <a href="/products/category/storage/">Storage</a>
+    <a href="/products/category/monitor/">Monitor</a>
+    <a href="/products/category/keyboard/">Keyboard</a>
+    <a href="/products/category/mouse/">Mouse</a>
+</div>
+
+<div class="product-grid">
+    {% for product in products %}
+        <div class="product-card">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% endif %}
+            <h3>{{ product.name }}</h3>
+
+            <p><strong>Brand:</strong> {{ product.brand }}</p>
+            <p><strong>Category:</strong> {{ product.category }}</p>
+            <p class="price">₹{{ product.price }}</p>
+
+            <p>{{ product.description|truncatewords:15 }}</p>
+
+            <a href="/products/{{ product.id }}/" class="view-btn">
+                View Details
+            </a>
+        </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
