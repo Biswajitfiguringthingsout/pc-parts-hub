@@ -1,17 +1,29 @@
-<!-- base.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>PC Parts Hub</title>
-</head>
-<body>
-    {% load static %}
 
+    {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <h1>PC Parts Hub</h1>
+</head>
+
+<body>
+
+    <h1>
+        <a href="/products/" style="text-decoration:none;color:inherit;">
+            PC Parts Hub
+        </a>
+    </h1>
+
+    <nav class="navbar">
+        <a href="/products/">Products</a>
+        <a href="/admin/">Admin</a>
+    </nav>
+
     <hr>
 
     {% block content %}
     {% endblock %}
+
 </body>
 </html>

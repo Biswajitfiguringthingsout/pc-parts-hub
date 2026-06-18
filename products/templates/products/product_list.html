@@ -2,8 +2,17 @@
 
 {% block content %}
 
-<h2>PC Components</h2>
 
+<h2>PC Components</h2>
+<form method="get" class="search-form">
+    <input
+        type="text"
+        name="q"
+        placeholder="Search products..."
+        value="{{ query }}"
+    >
+    <button type="submit">Search</button>
+</form>
 <div class="categories">
     <a href="/products/">All</a>
     <a href="/products/category/cpu/">CPU</a>
@@ -19,8 +28,10 @@
 <div class="product-grid">
     {% for product in products %}
         <div class="product-card">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+           {% if product.image %}
+                <div class="image-container">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                </div>
             {% endif %}
             <h3>{{ product.name }}</h3>
 

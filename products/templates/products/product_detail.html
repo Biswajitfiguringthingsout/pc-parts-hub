@@ -1,16 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-{% if product.image %}
-    <img src="{{ product.image.url }}" alt="{{ product.name }}">
-{% endif %}
-<h1>{{ product.name }}</h1>
 
-<p><strong>Brand:</strong> {{ product.brand }}</p>
-<p><strong>Category:</strong> {{ product.category }}</p>
-<p><strong>Price:</strong> ₹{{ product.price }}</p>
-<p>{{ product.description }}</p>
+<div class="product-detail">
 
-<a href="/products/">← Back to Products</a>
+    <div class="detail-image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% endif %}
+    </div>
+
+    <div class="detail-info">
+        <h1>{{ product.name }}</h1>
+
+        <p><strong>Brand:</strong> {{ product.brand }}</p>
+        <p><strong>Category:</strong> {{ product.category }}</p>
+
+        <h2 class="detail-price">₹{{ product.price }}</h2>
+
+        <h3>Description</h3>
+        <p>{{ product.description }}</p>
+
+        <a href="/products/" class="back-btn">
+            ← Back to Products
+        </a>
+    </div>
+
+</div>
 
 {% endblock %}
