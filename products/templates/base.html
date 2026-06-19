@@ -1,29 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PC Parts Hub</title>
-
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
 <body>
 
-    <h1>
-        <a href="/products/" style="text-decoration:none;color:inherit;">
-            PC Parts Hub
-        </a>
-    </h1>
+    <h1>PC Parts Hub</h1>
 
     <nav class="navbar">
+        <a href="/">Home</a>
         <a href="/products/">Products</a>
         <a href="/admin/">Admin</a>
-    </nav>
 
-    <hr>
+        <button id="theme-toggle" class="theme-switch">
+            <span class="slider"></span>
+        </button>
+    </nav>
 
     {% block content %}
     {% endblock %}
+
+    <script>
+        const toggleBtn = document.getElementById("theme-toggle");
+
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark-mode");
+        }
+
+        toggleBtn.addEventListener("click", () => {
+
+            document.body.classList.toggle("dark-mode");
+
+            if (document.body.classList.contains("dark-mode")) {
+                localStorage.setItem("theme", "dark");
+            } else {
+                localStorage.setItem("theme", "light");
+            }
+        });
+    </script>
 
 </body>
 </html>

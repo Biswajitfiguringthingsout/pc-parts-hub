@@ -13,6 +13,41 @@
     >
     <button type="submit">Search</button>
 </form>
+<form method="get" class="sort-form">
+
+    <input
+        type="hidden"
+        name="q"
+        value="{{ query }}"
+    >
+
+    <select name="sort" onchange="this.form.submit()">
+
+        <option value="">Sort By</option>
+
+        <option value="price_low"
+            {% if sort == "price_low" %}selected{% endif %}>
+            Price: Low to High
+        </option>
+
+        <option value="price_high"
+            {% if sort == "price_high" %}selected{% endif %}>
+            Price: High to Low
+        </option>
+
+        <option value="name_asc"
+            {% if sort == "name_asc" %}selected{% endif %}>
+            Name: A to Z
+        </option>
+
+        <option value="name_desc"
+            {% if sort == "name_desc" %}selected{% endif %}>
+            Name: Z to A
+        </option>
+
+    </select>
+
+</form>
 <div class="categories">
     <a href="/products/">All</a>
     <a href="/products/category/cpu/">CPU</a>
