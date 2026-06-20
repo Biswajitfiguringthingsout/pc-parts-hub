@@ -7,12 +7,34 @@
     <h2>Build Your Dream PC</h2>
 
     <p>
-        Browse CPUs, GPUs, RAM, Storage,
-        Monitors and Gaming Peripherals.
+        Explore high-performance CPUs, GPUs, RAM, motherboards,
+        and more to create the perfect setup.
     </p>
 
     <a href="/products/" class="browse-btn">
         Browse Components
+    </a>
+
+</div>
+
+<h2>Featured Categories</h2>
+
+<div class="category-grid">
+
+    <a href="/products/category/cpu/" class="category-card">
+        <h3>CPU</h3>
+    </a>
+
+    <a href="/products/category/gpu/" class="category-card">
+        <h3>GPU</h3>
+    </a>
+
+    <a href="/products/category/ram/" class="category-card">
+        <h3>RAM</h3>
+    </a>
+
+    <a href="/products/category/motherboard/" class="category-card">
+        <h3>Motherboard</h3>
     </a>
 
 </div>
@@ -23,23 +45,27 @@
 
     {% for product in featured_products %}
 
-    <div class="product-card">
+    <a href="/products/{{ product.id }}/" class="product-link">
 
-        {% if product.image %}
-            <div class="image-container">
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
-            </div>
-        {% endif %}
+        <div class="product-card">
 
-        <h3>{{ product.name }}</h3>
+            {% if product.image %}
+                <div class="image-container">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+                </div>
+            {% endif %}
 
-        <p>{{ product.brand }}</p>
+            <h3>{{ product.name }}</h3>
 
-        <p class="price">
-            ₹{{ product.price }}
-        </p>
+            <p>{{ product.brand }}</p>
 
-    </div>
+            <p class="price">
+                ₹{{ product.price }}
+            </p>
+
+        </div>
+
+    </a>
 
     {% endfor %}
 
