@@ -1,14 +1,20 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Product
-
+from .models import Brand
 
 def product_list(request):
     products = Product.objects.all()
+    brands = Brand.objects.all()
 
     query = request.GET.get('q', '').strip()
 
     if query:
         products = products.filter(name__icontains=query)
+
+    brand_id = request.GET.get('brand')
+
+    if brand_id:
+        products = products.filter(brand_id=brand_id)
 
     sort = request.GET.get('sort', '')
 
@@ -29,10 +35,11 @@ def product_list(request):
         'products/product_list.html',
         {
             'products': products,
+            'brands': brands,
             'query': query,
             'sort': sort,
         }
-    ) 
+    )
 
 
 def product_detail(request, id):
@@ -47,6 +54,7 @@ def product_detail(request, id):
 
 def products_by_category(request, category):
     products = Product.objects.filter(category=category)
+    brands = Brand.objects.all()
 
     query = request.GET.get('q', '').strip()
 
@@ -72,6 +80,7 @@ def products_by_category(request, category):
         'products/product_list.html',
         {
             'products': products,
+            'brands': brands,
             'query': query,
             'sort': sort,
         }

@@ -59,7 +59,19 @@
     <a href="/products/category/keyboard/">Keyboard</a>
     <a href="/products/category/mouse/">Mouse</a>
 </div>
+<h3>Filter by Brand</h3>
 
+<div class="brand-filter">
+
+    <a href="/products/">All Brands</a>
+
+    {% for brand in brands %}
+        <a href="?brand={{ brand.id }}">
+            {{ brand.name }}
+        </a>
+    {% endfor %}
+
+</div>
 <div class="product-grid">
     {% for product in products %}
         <div class="product-card">
@@ -70,7 +82,7 @@
             {% endif %}
             <h3>{{ product.name }}</h3>
 
-            <p><strong>Brand:</strong> {{ product.brand }}</p>
+            <p><strong>Brand:</strong> {{ product.brand.name }}</p>
             <p><strong>Category:</strong> {{ product.category }}</p>
             <p class="price">₹{{ product.price }}</p>
 
