@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product
-from .models import Brand
+from .models import Product, Brand
+
 
 def product_list(request):
     products = Product.objects.all()
@@ -38,6 +38,7 @@ def product_list(request):
             'brands': brands,
             'query': query,
             'sort': sort,
+            'brand_id': brand_id,
         }
     )
 
@@ -61,6 +62,11 @@ def products_by_category(request, category):
     if query:
         products = products.filter(name__icontains=query)
 
+    brand_id = request.GET.get('brand')
+
+    if brand_id:
+        products = products.filter(brand_id=brand_id)
+
     sort = request.GET.get('sort', '')
 
     if sort == 'price_low':
@@ -83,8 +89,12 @@ def products_by_category(request, category):
             'brands': brands,
             'query': query,
             'sort': sort,
+            'brand_id': brand_id,
+            'category': category,
         }
     )
+
+
 def home(request):
     featured_products = Product.objects.all()[:4]
 
@@ -94,4 +104,4 @@ def home(request):
         {
             'featured_products': featured_products
         }
-    )   
+    )

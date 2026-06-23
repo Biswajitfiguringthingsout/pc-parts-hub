@@ -4,73 +4,89 @@
 
 
 <h2>PC Components</h2>
-<form method="get" class="search-form">
-    <input
-        type="text"
-        name="q"
-        placeholder="Search products..."
-        value="{{ query }}"
-    >
-    <button type="submit">Search</button>
-</form>
-<form method="get" class="sort-form">
 
-    <input
-        type="hidden"
-        name="q"
-        value="{{ query }}"
-    >
+<div class="controls-panel">
 
-    <select name="sort" onchange="this.form.submit()">
+    <div class="filter-bar">
 
-        <option value="">Sort By</option>
+        <form method="get" class="search-form">
+            <input
+                type="text"
+                name="q"
+                placeholder="Search products..."
+                value="{{ query }}"
+            >
+            <button type="submit">Search</button>
+        </form>
 
-        <option value="price_low"
-            {% if sort == "price_low" %}selected{% endif %}>
-            Price: Low to High
-        </option>
+        <form method="get" class="sort-form">
 
-        <option value="price_high"
-            {% if sort == "price_high" %}selected{% endif %}>
-            Price: High to Low
-        </option>
+            <input
+                type="hidden"
+                name="q"
+                value="{{ query }}"
+            >
 
-        <option value="name_asc"
-            {% if sort == "name_asc" %}selected{% endif %}>
-            Name: A to Z
-        </option>
+            <select name="sort" onchange="this.form.submit()">
+                <option value="">Sort By</option>
 
-        <option value="name_desc"
-            {% if sort == "name_desc" %}selected{% endif %}>
-            Name: Z to A
-        </option>
+                <option value="price_low"
+                    {% if sort == "price_low" %}selected{% endif %}>
+                    Price: Low to High
+                </option>
 
-    </select>
+                <option value="price_high"
+                    {% if sort == "price_high" %}selected{% endif %}>
+                    Price: High to Low
+                </option>
 
-</form>
-<div class="categories">
-    <a href="/products/">All</a>
-    <a href="/products/category/cpu/">CPU</a>
-    <a href="/products/category/gpu/">GPU</a>
-    <a href="/products/category/motherboard/">Motherboard</a>
-    <a href="/products/category/ram/">RAM</a>
-    <a href="/products/category/storage/">Storage</a>
-    <a href="/products/category/monitor/">Monitor</a>
-    <a href="/products/category/keyboard/">Keyboard</a>
-    <a href="/products/category/mouse/">Mouse</a>
+                <option value="name_asc"
+                    {% if sort == "name_asc" %}selected{% endif %}>
+                    Name: A to Z
+                </option>
+
+                <option value="name_desc"
+                    {% if sort == "name_desc" %}selected{% endif %}>
+                    Name: Z to A
+                </option>
+            </select>
+
+        </form>
+
+    </div>
+
+    <div class="categories">
+        <a href="/products/">All</a>
+        <a href="/products/category/cpu/">CPU</a>
+        <a href="/products/category/gpu/">GPU</a>
+        <a href="/products/category/motherboard/">Motherboard</a>
+        <a href="/products/category/ram/">RAM</a>
+        <a href="/products/category/storage/">Storage</a>
+        <a href="/products/category/monitor/">Monitor</a>
+        <a href="/products/category/keyboard/">Keyboard</a>
+        <a href="/products/category/mouse/">Mouse</a>
+    </div>
+
 </div>
-<h3>Filter by Brand</h3>
+<div class="sidebar-filter">
+    <details>
+        <summary>Brands</summary>
 
-<div class="brand-filter">
+        <form method="get">
+            {% for brand in brands %}
+                <label class="brand-checkbox">
+                    <input
+                        type="radio"
+                        name="brand"
+                        value="{{ brand.id }}"
+                        onchange="this.form.submit()"
+                    >
+                    {{ brand.name }}
+                </label>
+            {% endfor %}
+        </form>
 
-    <a href="/products/">All Brands</a>
-
-    {% for brand in brands %}
-        <a href="?brand={{ brand.id }}">
-            {{ brand.name }}
-        </a>
-    {% endfor %}
-
+    </details>
 </div>
 <div class="product-grid">
     {% for product in products %}
