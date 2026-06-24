@@ -52,3 +52,23 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+class Build(models.Model):
+    name = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+class BuildItem(models.Model):
+    build = models.ForeignKey(
+        Build,
+        on_delete=models.CASCADE
+    )
+
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return f"{self.build.name} - {self.product.name}"
+           

@@ -10,4 +10,14 @@ urlpatterns = [
         views.products_by_category,
         name='products_by_category'
     ),
+    path(
+        'build/',
+        views.build_page,
+        name='build_page'
+    ),
+    path(
+        'build/add/<int:product_id>/',
+        views.add_to_build,
+        name='add_to_build'
+    ),
 ]

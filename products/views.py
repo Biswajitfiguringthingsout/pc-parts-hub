@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Product, Brand
-
-
+from .models import Product,Brand,Build,BuildItem
+from django.core.paginator import Paginator
+from django.shortcuts import redirect
+from django.db.models import Sum
 def product_list(request):
     products = Product.objects.all()
     brands = Brand.objects.all()
-
+    
     query = request.GET.get('q', '').strip()
 
     if query:
@@ -29,7 +30,14 @@ def product_list(request):
 
     elif sort == 'name_desc':
         products = products.order_by('-name')
+        
+    paginator = Paginator(products, 10)
 
+    page_number = request.GET.get('page')
+
+    products = paginator.get_page(page_number)
+    query = request.GET.get('q', '').strip()
+    
     return render(
         request,
         'products/product_list.html',
@@ -40,6 +48,7 @@ def product_list(request):
             'sort': sort,
             'brand_id': brand_id,
         }
+
     )
 
 
@@ -105,3 +114,36 @@ def home(request):
             'featured_products': featured_products
         }
     )
+def build_page(request):
+
+    build = Build.objects.first()
+
+    items = BuildItem.objects.filter(build=build)
+
+    total_price = items.aggregate(
+    total=Sum('product__price'))['total'] or 0
+
+    return render(
+        request,
+        'products/build_page.html',
+        {
+            'build': build,
+            'items': items,
+            'total_price': total_price,
+        }
+    )
+def add_to_build(request, product_id):
+
+    build = Build.objects.first()
+    
+    product = get_object_or_404(
+        Product,
+        id=product_id
+    )
+
+    BuildItem.objects.create(
+        build=build,
+        product=product
+    )
+
+    return redirect('build_page')    
