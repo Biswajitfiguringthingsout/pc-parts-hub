@@ -135,15 +135,45 @@ def build_page(request):
 def add_to_build(request, product_id):
 
     build = Build.objects.first()
-    
+
     product = get_object_or_404(
         Product,
         id=product_id
     )
+
+    single_component_categories = [
+        'cpu',
+        'gpu',
+        'motherboard',
+        'case',
+        'psu',
+        'cooler'
+    ]
+
+    if product.category.lower() in single_component_categories:
+
+        existing_item = BuildItem.objects.filter(
+            build=build,
+            product__category=product.category
+        ).first()
+
+        if existing_item:
+            existing_item.delete()
 
     BuildItem.objects.create(
         build=build,
         product=product
     )
 
-    return redirect('build_page')    
+    return redirect('build_page') 
+
+def remove_build_item(request, item_id):
+
+    item = get_object_or_404(
+        BuildItem,
+        id=item_id
+    )
+
+    item.delete()
+
+    return redirect('build_page')

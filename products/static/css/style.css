@@ -624,7 +624,10 @@ strong {
 
 .build-card {
     background: var(--card);
+    display: flex;
+    flex-direction: column;
 
+    height: 100%;
     border-radius: 14px;
 
     padding: 20px;
@@ -659,3 +662,28 @@ strong {
     text-align: center;
     padding: 40px;
 }
+.remove-btn {
+    display: inline-block;
+
+    margin-top: auto;
+
+    padding: 10px 18px;
+
+    background: #dc2626;
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    background: #ef4444;
+
+    transform: translateY(-2px);
+}
+
