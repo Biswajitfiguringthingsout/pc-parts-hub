@@ -50,6 +50,56 @@ class Product(models.Model):
         blank=True
     )
 
+    # Compatibility fields
+    socket = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True
+    )
+
+    memory_type = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+
+    pcie_generation = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True
+    )
+
+    # Power fields
+    power_draw = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Power consumption in Watts"
+    )
+
+    recommended_psu = models.PositiveIntegerField(
+        blank=True,
+        null=True,
+        help_text="Recommended PSU Wattage"
+    )
+
+    # Capacity / Specs
+    capacity = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="Example: 32GB, 2TB"
+    )
+
+    supported_cpu_sockets = models.CharField(
+        max_length=200,
+        blank=True,
+        null=True,
+        help_text="Comma separated. Example: AM4,AM5,LGA1700"
+    )
+
+    def __str__(self):
+        return self.name 
+
     def __str__(self):
         return self.name
 class Build(models.Model):
@@ -71,4 +121,4 @@ class BuildItem(models.Model):
 
     def __str__(self):
         return f"{self.build.name} - {self.product.name}"
-           
+    

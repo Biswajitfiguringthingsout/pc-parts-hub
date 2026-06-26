@@ -120,17 +120,30 @@ def build_page(request):
 
     items = BuildItem.objects.filter(build=build)
 
-    total_price = items.aggregate(
-    total=Sum('product__price'))['total'] or 0
+    total_price = sum(
+        item.product.price
+        for item in items
+    )
+
+    slots = {
+        "CPU": items.filter(product__category="cpu").first(),
+        "Motherboard": items.filter(product__category="motherboard").first(),
+        "GPU": items.filter(product__category="gpu").first(),
+        "RAM": items.filter(product__category="ram"),
+        "Storage": items.filter(product__category="storage"),
+        "Monitor": items.filter(product__category="monitor"),
+        "Keyboard": items.filter(product__category="keyboard"),
+        "Mouse": items.filter(product__category="mouse"),
+    }
 
     return render(
         request,
-        'products/build_page.html',
+        "products/build_page.html",
         {
-            'build': build,
-            'items': items,
-            'total_price': total_price,
-        }
+            "build": build,
+            "slots": slots,
+            "total_price": total_price,
+        },
     )
 def add_to_build(request, product_id):
 

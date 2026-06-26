@@ -2,36 +2,83 @@
 
 {% block content %}
 <h2>{{ build.name }}</h2>
-<div class="build-grid">
-    {% for item in items %}
-        <div class="build-card">
 
-            {% if item.product.image %}
-                <img
-                    src="{{ item.product.image.url }}"
-                    alt="{{ item.product.name }}"
-                    class="build-image"
-                >
-            {% endif %}
+<div class="build-layout">
 
-            <h3>{{ item.product.name }}</h3>
+    <!-- CPU -->
+    <div class="slot-card">
+        <h3>CPU</h3>
 
-            <p>
-                <strong>Category:</strong>
-                {{ item.product.category }}
-            </p>
+        {% if slots.CPU %}
+            <img src="{{ slots.CPU.product.image.url }}" class="slot-image">
+
+            <h4>{{ slots.CPU.product.name }}</h4>
 
             <p class="price">
-                ₹{{ item.product.price }}
+                ₹{{ slots.CPU.product.price }}
             </p>
-            <a
-                href="{% url 'remove_build_item' item.id %}"
-                class="remove-btn">
+
+            <a href="{% url 'remove_build_item' slots.CPU.id %}" class="remove-btn">
                 Remove
             </a>
-        </div>
-    {% endfor %}
+
+        {% else %}
+            <p>No CPU Selected</p>
+        {% endif %}
+    </div>
+
+    <!-- Motherboard -->
+    <div class="slot-card">
+
+        <h3>Motherboard</h3>
+
+        {% if slots.Motherboard %}
+
+            <img src="{{ slots.Motherboard.product.image.url }}" class="slot-image">
+
+            <h4>{{ slots.Motherboard.product.name }}</h4>
+
+            <p class="price">
+                ₹{{ slots.Motherboard.product.price }}
+            </p>
+
+            <a href="{% url 'remove_build_item' slots.Motherboard.id %}" class="remove-btn">
+                Remove
+            </a>
+
+        {% else %}
+            <p>No Motherboard Selected</p>
+        {% endif %}
+
+    </div>
+
+    <!-- GPU -->
+    <div class="slot-card">
+
+        <h3>GPU</h3>
+
+        {% if slots.GPU %}
+
+            <img src="{{ slots.GPU.product.image.url }}" class="slot-image">
+
+            <h4>{{ slots.GPU.product.name }}</h4>
+
+            <p class="price">
+                ₹{{ slots.GPU.product.price }}
+            </p>
+
+            <a href="{% url 'remove_build_item' slots.GPU.id %}" class="remove-btn">
+                Remove
+            </a>
+
+        {% else %}
+            <p>No GPU Selected</p>
+        {% endif %}
+
+    </div>
+
 </div>
+
 <div class="build-summary">
 
     <h2>Total Build Price</h2>
@@ -41,9 +88,5 @@
     </div>
 
 </div>
-
-{% if not items %}
-    <p>No components added yet.</p>
-{% endif %}
 
 {% endblock %}
