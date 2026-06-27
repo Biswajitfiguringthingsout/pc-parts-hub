@@ -129,20 +129,87 @@ def build_page(request):
         "CPU": items.filter(product__category="cpu").first(),
         "Motherboard": items.filter(product__category="motherboard").first(),
         "GPU": items.filter(product__category="gpu").first(),
+
         "RAM": items.filter(product__category="ram"),
         "Storage": items.filter(product__category="storage"),
+
+        "PSU": items.filter(product__category="psu").first(),
+        "Case": items.filter(product__category="case").first(),
+        "Cooler": items.filter(product__category="cooler").first(),
+        "PSU": items.filter(product__category="psu").first(),
+
+
         "Monitor": items.filter(product__category="monitor"),
         "Keyboard": items.filter(product__category="keyboard"),
         "Mouse": items.filter(product__category="mouse"),
     }
+    compatibility_messages = []
 
+    cpu = slots["CPU"]
+    motherboard = slots["Motherboard"]
+
+    ram_queryset = slots["RAM"]
+    ram = ram_queryset.first()
+
+    gpu = slots["GPU"]
+
+    # CPU ↔ Motherboard compatibility
+    if cpu and motherboard:
+
+        if cpu.product.socket == motherboard.product.socket:
+
+            compatibility_messages.append(
+                ("success", "CPU and Motherboard are compatible.")
+            )
+
+        else:
+
+            compatibility_messages.append(
+                ("error", "CPU socket is incompatible with the selected Motherboard.")
+            )
+
+    # RAM ↔ Motherboard compatibility
+    if ram and motherboard:
+
+        if ram.product.memory_type == motherboard.product.memory_type:
+
+            compatibility_messages.append(
+                ("success", "RAM is compatible with the Motherboard.")
+            )
+
+        else:
+
+            compatibility_messages.append(
+                ("error", "RAM type is incompatible with the selected Motherboard.")
+            )
+
+    # Total Power Draw
+    total_power = sum(
+        item.product.power_draw or 0
+        for item in items
+    )
+
+    # Recommended PSU
+    recommended_psu = int(total_power * 1.3)
+    
+
+    psu_sizes = [450, 550, 650, 750, 850, 1000, 1200]
+
+    for size in psu_sizes:
+        if recommended_psu <= size:
+            recommended_psu = size
+            break
     return render(
         request,
         "products/build_page.html",
-        {
+       {
             "build": build,
             "slots": slots,
             "total_price": total_price,
+
+            "compatibility_messages": compatibility_messages,
+            "total_power": total_power,
+            "recommended_psu": recommended_psu,
         },
     )
 def add_to_build(request, product_id):
