@@ -7,271 +7,134 @@
 <div class="builder-container">
 
     <!-- LEFT SIDEBAR -->
-<div class="builder-sidebar">
+    <div class="builder-sidebar">
 
-    <div class="build-layout">
+        <div class="build-layout">
 
-        <!-- CPU -->
-        <div class="slot-card">
-            <h3>CPU</h3>
+            {% for name, item in slots.items %}
 
-            {% if slots.CPU %}
-                <img src="{{ slots.CPU.product.image.url }}" class="slot-image">
-                <h4>{{ slots.CPU.product.name }}</h4>
-                <p class="price">₹{{ slots.CPU.product.price }}</p>
+            <div class="slot-card">
 
-                <a href="{% url 'remove_build_item' slots.CPU.id %}" class="remove-btn">
-                    Remove
-                </a>
-            {% else %}
-                <p>No CPU Selected</p>
-            {% endif %}
-        </div>
+                <h3>{{ name }}</h3>
 
-        <!-- Motherboard -->
-        <div class="slot-card">
-            <h3>Motherboard</h3>
+                {% if item %}
 
-            {% if slots.Motherboard %}
-                <img src="{{ slots.Motherboard.product.image.url }}" class="slot-image">
-                <h4>{{ slots.Motherboard.product.name }}</h4>
-                <p class="price">₹{{ slots.Motherboard.product.price }}</p>
+                    {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" class="slot-image">
+                    {% endif %}
 
-                <a href="{% url 'remove_build_item' slots.Motherboard.id %}" class="remove-btn">
-                    Remove
-                </a>
-            {% else %}
-                <p>No Motherboard Selected</p>
-            {% endif %}
-        </div>
+                    <h4>{{ item.product.name }}</h4>
 
-        <!-- GPU -->
-        <div class="slot-card">
-            <h3>GPU</h3>
-
-            {% if slots.GPU %}
-                <img src="{{ slots.GPU.product.image.url }}" class="slot-image">
-                <h4>{{ slots.GPU.product.name }}</h4>
-                <p class="price">₹{{ slots.GPU.product.price }}</p>
-
-                <a href="{% url 'remove_build_item' slots.GPU.id %}" class="remove-btn">
-                    Remove
-                </a>
-            {% else %}
-                <p>No GPU Selected</p>
-            {% endif %}
-        </div>
-
-        <!-- RAM -->
-        <div class="slot-card">
-            <h3>RAM</h3>
-
-            {% with ram=slots.RAM.first %}
-                {% if ram %}
-                    <img src="{{ ram.product.image.url }}" class="slot-image">
-                    <h4>{{ ram.product.name }}</h4>
-                    <p class="price">₹{{ ram.product.price }}</p>
-
-                    <a href="{% url 'remove_build_item' ram.id %}" class="remove-btn">
-                        Remove
-                    </a>
-                {% else %}
-                    <p>No RAM Selected</p>
-                {% endif %}
-            {% endwith %}
-        </div>
-
-        <!-- Storage -->
-        <div class="slot-card">
-            <h3>Storage</h3>
-
-            {% with storage=slots.Storage.first %}
-                {% if storage %}
-                    <img src="{{ storage.product.image.url }}" class="slot-image">
-                    <h4>{{ storage.product.name }}</h4>
-                    <p class="price">₹{{ storage.product.price }}</p>
-
-                    <a href="{% url 'remove_build_item' storage.id %}" class="remove-btn">
-                        Remove
-                    </a>
-                {% else %}
-                    <p>No Storage Selected</p>
-                {% endif %}
-            {% endwith %}
-        </div>
-
-        <!-- PSU -->
-        <div class="slot-card">
-            <h3>Power Supply</h3>
-
-            {% if slots.PSU %}
-                <img src="{{ slots.PSU.product.image.url }}" class="slot-image">
-                <h4>{{ slots.PSU.product.name }}</h4>
-                <p class="price">₹{{ slots.PSU.product.price }}</p>
-
-                <a href="{% url 'remove_build_item' slots.PSU.id %}" class="remove-btn">
-                    Remove
-                </a>
-            {% else %}
-                <p>No PSU Selected</p>
-            {% endif %}
-        </div>
-
-        <!-- Case -->
-        <div class="slot-card">
-            <h3>Case</h3>
-
-            {% if slots.Case %}
-                <img src="{{ slots.Case.product.image.url }}" class="slot-image">
-                <h4>{{ slots.Case.product.name }}</h4>
-                <p class="price">₹{{ slots.Case.product.price }}</p>
-
-                <a href="{% url 'remove_build_item' slots.Case.id %}" class="remove-btn">
-                    Remove
-                </a>
-            {% else %}
-                <p>No Case Selected</p>
-            {% endif %}
-        </div>
-
-        <!-- Cooler -->
-        <div class="slot-card">
-            <h3>CPU Cooler</h3>
-
-            {% if slots.Cooler %}
-                <img src="{{ slots.Cooler.product.image.url }}" class="slot-image">
-                <h4>{{ slots.Cooler.product.name }}</h4>
-                <p class="price">₹{{ slots.Cooler.product.price }}</p>
-
-                <a href="{% url 'remove_build_item' slots.Cooler.id %}" class="remove-btn">
-                    Remove
-                </a>
-            {% else %}
-                <p>No Cooler Selected</p>
-            {% endif %}
-        </div>
-
-    
-        <!-- Monitor -->
-        <div class="slot-card">
-            <h3>Monitor</h3>
-
-            {% with monitor=slots.Monitor.first %}
-                {% if monitor %}
-                    <img src="{{ monitor.product.image.url }}" class="slot-image">
-                    <h4>{{ monitor.product.name }}</h4>
-                    <p class="price">₹{{ monitor.product.price }}</p>
-
-                    <a href="{% url 'remove_build_item' monitor.id %}" class="remove-btn">
-                        Remove
-                    </a>
-                {% else %}
-                    <p>No Monitor Selected</p>
-                {% endif %}
-            {% endwith %}
-        </div>
-
-        <!-- Keyboard -->
-        <div class="slot-card">
-            <h3>Keyboard</h3>
-
-            {% with keyboard=slots.Keyboard.first %}
-                {% if keyboard %}
-                    <img src="{{ keyboard.product.image.url }}" class="slot-image">
-                    <h4>{{ keyboard.product.name }}</h4>
-                    <p class="price">₹{{ keyboard.product.price }}</p>
-
-                    <a href="{% url 'remove_build_item' keyboard.id %}" class="remove-btn">
-                        Remove
-                    </a>
-                {% else %}
-                    <p>No Keyboard Selected</p>
-                {% endif %}
-            {% endwith %}
-        </div>
-
-        <!-- Mouse -->
-        <div class="slot-card">
-            <h3>Mouse</h3>
-
-            {% with mouse=slots.Mouse.first %}
-                {% if mouse %}
-                    <img src="{{ mouse.product.image.url }}" class="slot-image">
-                    <h4>{{ mouse.product.name }}</h4>
-                    <p class="price">₹{{ mouse.product.price }}</p>
-
-                    <a href="{% url 'remove_build_item' mouse.id %}" class="remove-btn">
-                        Remove
-                    </a>
-                {% else %}
-                    <p>No Mouse Selected</p>
-                {% endif %}
-            {% endwith %}
-        </div>
-
-    </div> <!-- build-layout -->
-
-</div> <!-- builder-sidebar -->
-
-
-
-<div class="builder-workspace">
-
-    <div class="workspace-placeholder">
-
-        <h2>Interactive PC Builder</h2>
-
-        <p>3D Workspace Coming Soon</p>
-
-    </div>
-
-
-    <div class="build-summary">
-
-        <h2>Total Build Price</h2>
-
-        <div class="build-total">
-            ₹{{ total_price }}
-        </div>
-
-        <h2>Compatibility Check</h2>
-
-        {% if compatibility_messages %}
-
-            {% for status, message in compatibility_messages %}
-
-                {% if status == "success" %}
-                    <p class="compatibility-success">
-                        ✅ {{ message }}
+                    <p class="price">
+                        ₹{{ item.product.price }}
                     </p>
+
+                    <a href="{% url 'remove_build_item' item.id %}"
+                       class="remove-btn">
+                        Remove
+                    </a>
+
                 {% else %}
-                    <p class="compatibility-error">
-                        ❌ {{ message }}
-                    </p>
+
+                    <p>No {{ name }} Selected</p>
+
                 {% endif %}
+
+            </div>
 
             {% endfor %}
 
-        {% else %}
-
-            <p>Add compatible components to begin checking.</p>
-
-        {% endif %}
-
-        <hr>
-
-        <h3>Estimated Power Draw</h3>
-
-        <p>⚡ {{ total_power }} W</p>
-
-        <h3>Recommended PSU</h3>
-
-        <p>🔋 {{ recommended_psu }} W</p>
+        </div>
 
     </div>
 
-</div> <!-- builder-workspace -->
 
-</div> <!-- builder-container -->
+    <!-- RIGHT SIDE -->
+    <div class="builder-workspace">
+
+        <div class="workspace-placeholder">
+
+            <h2>Interactive PC Builder</h2>
+
+            <p>3D Workspace Coming Soon</p>
+
+        </div>
+
+
+        <div class="build-summary">
+
+            <h2>Build Summary</h2>
+
+            <p>
+                <strong>Components Installed:</strong>
+                {{ component_count }}/12
+            </p>
+
+            <p>
+                <strong>Total Price:</strong>
+                ₹{{ total_price }}
+            </p>
+
+            <p>
+                <strong>Estimated Power:</strong>
+                ⚡ {{ total_power }} W
+            </p>
+
+            <p>
+                <strong>Recommended PSU:</strong>
+                🔋 {{ recommended_psu }} W
+            </p>
+
+            <p>
+                <strong>Estimated Monthly Electricity:</strong>
+                ₹{{ estimated_monthly_power_cost }}
+            </p>
+
+            <hr>
+
+            <h3>Compatibility Check</h3>
+
+            {% if compatibility_messages %}
+
+                {% for status, message in compatibility_messages %}
+
+                    {% if status == "success" %}
+                        <p class="compatibility-success">
+                            ✅ {{ message }}
+                        </p>
+                    {% else %}
+                        <p class="compatibility-error">
+                            ❌ {{ message }}
+                        </p>
+                    {% endif %}
+
+                {% endfor %}
+
+            {% else %}
+
+                <p>Add compatible components to begin checking.</p>
+
+            {% endif %}
+
+        </div>
+
+        <div class="future-panel">
+            <h2>FPS Estimator</h2>
+            <p>Coming Soon</p>
+        </div>
+
+        <div class="future-panel">
+            <h2>Thermal Analysis</h2>
+            <p>Coming Soon</p>
+        </div>
+
+        <div class="future-panel">
+            <h2>Price History</h2>
+            <p>Coming Soon</p>
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

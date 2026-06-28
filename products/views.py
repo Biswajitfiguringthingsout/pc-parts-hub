@@ -126,30 +126,25 @@ def build_page(request):
     )
 
     slots = {
-        "CPU": items.filter(product__category="cpu").first(),
-        "Motherboard": items.filter(product__category="motherboard").first(),
-        "GPU": items.filter(product__category="gpu").first(),
-
-        "RAM": items.filter(product__category="ram"),
-        "Storage": items.filter(product__category="storage"),
-
-        "PSU": items.filter(product__category="psu").first(),
-        "Case": items.filter(product__category="case").first(),
-        "Cooler": items.filter(product__category="cooler").first(),
-        "PSU": items.filter(product__category="psu").first(),
-
-
-        "Monitor": items.filter(product__category="monitor"),
-        "Keyboard": items.filter(product__category="keyboard"),
-        "Mouse": items.filter(product__category="mouse"),
-    }
+            "CPU": items.filter(product__category="cpu").first(),
+            "Motherboard": items.filter(product__category="motherboard").first(),
+            "GPU": items.filter(product__category="gpu").first(),
+            "RAM": items.filter(product__category="ram").first(),
+            "Storage": items.filter(product__category="storage").first(),
+            "PSU": items.filter(product__category="psu").first(),
+            "Case": items.filter(product__category="case").first(),
+            "Cooler": items.filter(product__category="cooler").first(),
+            "Monitor": items.filter(product__category="monitor").first(),
+            "Keyboard": items.filter(product__category="keyboard").first(),
+            "Mouse": items.filter(product__category="mouse").first(),
+            "Headset": items.filter(product__category="headset").first(),
+        }
     compatibility_messages = []
 
     cpu = slots["CPU"]
     motherboard = slots["Motherboard"]
 
-    ram_queryset = slots["RAM"]
-    ram = ram_queryset.first()
+    ram = slots["RAM"]
 
     gpu = slots["GPU"]
 
@@ -199,6 +194,11 @@ def build_page(request):
         if recommended_psu <= size:
             recommended_psu = size
             break
+
+    component_count = items.count()
+
+    estimated_monthly_power_cost = round(
+    (total_power * 4 * 30 / 1000) * 8)
     return render(
         request,
         "products/build_page.html",
@@ -206,7 +206,8 @@ def build_page(request):
             "build": build,
             "slots": slots,
             "total_price": total_price,
-
+            "component_count": component_count,
+            "estimated_monthly_power_cost": estimated_monthly_power_cost,
             "compatibility_messages": compatibility_messages,
             "total_power": total_power,
             "recommended_psu": recommended_psu,
