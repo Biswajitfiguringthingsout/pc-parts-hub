@@ -96,7 +96,59 @@ class Product(models.Model):
         null=True,
         help_text="Comma separated. Example: AM4,AM5,LGA1700"
     )
+    form_factor = models.CharField(
+    max_length=20,
+    blank=True,
+    null=True,
+    help_text="ATX, Micro-ATX, Mini-ITX"
+    )
 
+    supported_form_factors = models.CharField(
+    max_length=100,
+    blank=True,
+    null=True,
+    help_text="Example: ATX,Micro-ATX,Mini-ITX"
+    )
+    gpu_length = models.IntegerField(
+    null=True,
+    blank=True,
+    help_text="Length in mm"
+    )
+
+    max_gpu_length = models.IntegerField(
+    null=True,
+    blank=True,
+    help_text="Maximum supported GPU length"
+    )
+    cooler_height = models.IntegerField(
+    null=True,
+    blank=True
+    )
+
+    max_cooler_height = models.IntegerField(
+    null=True,
+    blank=True
+    )
+    storage_interface = models.CharField(
+    max_length=20,
+    blank=True,
+    null=True,
+    choices=[
+        ("M.2", "M.2"),
+        ("SATA", "SATA"),
+    ]
+    )
+    m2_slots = models.IntegerField(
+    null=True,
+    blank=True,
+    default=0
+    )
+
+    sata_ports = models.IntegerField(
+    null=True,
+    blank=True,
+    default=0
+    )
     def __str__(self):
         return self.name 
 
