@@ -5,7 +5,7 @@
 }
 
 .dark-mode {
-    --bg: #0d1117;
+    --bg: #162a3a;
     --card: #161b22;
     --text: #e6edf3;
 }
@@ -641,7 +641,7 @@ strong {
     transform: translateY(-5px);
 
     box-shadow:
-        0 10px 25px rgba(22,119,255,0.2);
+        0 10px 25px rgba(32, 125, 255, 0.32);
 }
 
 .build-image {
@@ -655,7 +655,7 @@ strong {
 .build-total {
     font-size: 3rem;
     font-weight: 700;
-    color: #00d26a;
+    color: #01773c;
 }
 
 .build-summary {
