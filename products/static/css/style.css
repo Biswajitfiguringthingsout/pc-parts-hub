@@ -5,7 +5,7 @@
 }
 
 .dark-mode {
-    --bg: #162a3a;
+    --bg: #0f1e29;
     --card: #161b22;
     --text: #e6edf3;
 }
@@ -686,70 +686,81 @@ strong {
 
     transform: translateY(-2px);
 }
+
+/* =======================================================
+   BUILDER V2
+======================================================= */
+
 .builder-container{
-    display:flex;
+    display:grid;
+    grid-template-columns:340px 1fr;
     gap:30px;
-    margin-top:30px;
+    margin-top:25px;
+    align-items:start;
 }
+
+/* LEFT PANEL */
 
 .builder-sidebar{
-    width:380px;
-    flex-shrink:0;
-}
-
-.builder-workspace{
-    flex:1;
-}
-
-.build-layout{
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-}
-
-.workspace-placeholder{
-    height:550px;
 
     background:var(--card);
 
-    border-radius:16px;
+    border:1px solid rgba(0,0,0,.08);
 
-    border:2px dashed #2b85ff;
+    border-radius:18px;
+
+    padding:20px;
+
+    position:sticky;
+    top:20px;
+
+    height:calc(100vh - 120px);
+
+    overflow-y:auto;
+}
+
+.build-layout{
 
     display:flex;
-    justify-content:center;
-    align-items:center;
+
     flex-direction:column;
 
-    margin-bottom:30px;
+    gap:14px;
+
 }
 
-.slot-card {
+/* COMPONENT CARD */
 
-    background: var(--card);
+.slot-card{
 
-    color: var(--text);
+    background:var(--card);
 
-    border-radius: 14px;
+    border:1px solid rgba(0,0,0,.08);
 
-    padding: 25px;
+    border-radius:14px;
 
-    box-shadow: 0 5px 15px rgba(0,0,0,.12);
+    padding:16px;
 
-    display: flex;
+    min-height:unset;
 
-    flex-direction: column;
-
-    transition: .3s;
-    
-    min-height:360px;
+    transition:.25s;
 }
 
-.slot-card:hover {
+.slot-card:hover{
 
-    transform: translateY(-5px);
+    transform:translateY(-3px);
 
-    box-shadow: 0 10px 25px rgba(0,119,255,.15);
+    border-color:#3b82f6;
+
+    box-shadow:0 10px 25px rgba(59,130,246,.18);
+
+}
+
+.slot-card h3{
+
+    font-size:17px;
+
+    margin-bottom:10px;
 
 }
 
@@ -757,21 +768,375 @@ strong {
 
     width:100%;
 
-    height:180px;
+    height:110px;
 
     object-fit:contain;
 
-    margin:20px 0;
+    margin:10px 0;
 
 }
-.compatibility-success{
-    color:#22c55e;
-    font-weight:600;
-    margin:10px 0;
+
+.slot-card h4{
+
+    font-size:15px;
+
+    margin-bottom:8px;
+
 }
 
-.compatibility-error{
-    color:#ef4444;
+.price{
+
+    color:var(--text);
+
+    font-size:18px;
+
+    font-weight:700;
+
+}
+
+.remove-btn{
+
+    margin-top:15px;
+
+    display:block;
+
+    text-align:center;
+
+    background:var(--card);
+
+    color:var(--text);
+
+    padding:10px;
+
+    border-radius:8px;
+
+    text-decoration:none;
+
+}
+
+.remove-btn:hover{
+
+    background:var(--card);
+
+}
+
+/* RIGHT SIDE */
+
+.builder-workspace{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+
+}
+
+/* 3D SCREEN */
+
+.workspace-view{
+
+    background:var(--card);
+
+    border-radius:18px;
+
+    padding:25px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+
+.workspace-view h2{
+
+    margin-bottom:20px;
+
+}
+
+.pc-preview{
+
+    height:520px;
+
+    background:var(--card);
+
+    border:1px solid rgba(0,0,0,.08);
+
+    border-radius:18px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.pc-stage{
+
+    width:90%;
+
+    height:90%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:relative;
+
+}
+
+.pc-image{
+
+    width:65%;
+
+    object-fit:contain;
+
+    opacity:.9;
+
+}
+
+.pc-overlay{
+
+    position:absolute;
+
+    inset:0;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.overlay-text{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:var(--text);
+
+    background:var(--card);
+
+    padding:14px 26px;
+
+    border-radius:12px;
+
+}
+
+/* DASHBOARD */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+}
+
+.dashboard-card{
+
+    background:var(--card);
+
+    border-radius:14px;
+
+    padding:22px;
+
+    border:1px solid rgba(0,0,0,.08);
+
+}
+
+.dashboard-card h3{
+
+    font-size:15px;
+
+    color:var(--text);
+
+}
+
+.dashboard-card h2{
+
+    margin-top:12px;
+
+    font-size:30px;
+
+}
+
+/* COMPATIBILITY */
+
+.compatibility-panel{
+
+    background:var(--card);
+
+    border-radius:18px;
+
+    padding:25px;
+
+}
+
+.panel-title{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:20px;
+
+}
+
+.compatibility-item{
+
+    padding:14px 18px;
+
+    border-radius:10px;
+
+    margin-bottom:12px;
+
     font-weight:600;
-    margin:10px 0;
+
+}
+
+.success{
+
+    background:var(--card);
+
+    color:var(--text);
+
+}
+
+.error{
+
+    background:var(--card);
+
+    color:var(--text);
+
+}
+
+/* TABS */
+
+.builder-tabs{
+
+    display:flex;
+
+    gap:14px;
+
+}
+
+.builder-tabs button{
+
+    background:var(--card);
+
+    color:var(--text);
+
+    border:none;
+
+    padding:12px 22px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.builder-tabs button:hover{
+
+    background:var(--card);
+
+}
+
+.active-tab{
+
+    background:var(--card);
+}
+
+/* CONTENT */
+
+.tab-content{
+
+    background:var(--card);
+
+    border-radius:18px;
+
+    padding:30px;
+
+}
+.dark-mode .builder-sidebar,
+.dark-mode .workspace-view,
+.dark-mode .dashboard-card,
+.dark-mode .compatibility-panel,
+.dark-mode .tab-content{
+
+    border:1px solid rgba(255,255,255,.08);
+
+}
+/* ============================= */
+/* SIDEBAR COLLAPSE */
+/* ============================= */
+
+.builder-sidebar{
+
+    width:360px;
+
+    transition:all .35s ease;
+
+    overflow:hidden;
+
+}
+
+.builder-sidebar.collapsed{
+
+    width:95px;
+
+}
+
+/* Hide text */
+
+.builder-sidebar.collapsed h4,
+
+.builder-sidebar.collapsed .price,
+
+.builder-sidebar.collapsed .remove-btn{
+
+    display:none;
+
+}
+
+/* Smaller cards */
+
+.builder-sidebar.collapsed .slot-card{
+
+    padding:12px;
+
+    min-height:120px;
+
+    align-items:center;
+
+}
+
+/* Images */
+
+.builder-sidebar.collapsed .slot-image{
+
+    width:55px;
+
+    height:55px;
+
+    margin:10px auto;
+
+}
+
+/* Component title */
+
+.builder-sidebar.collapsed h3{
+
+    font-size:14px;
+
+    text-align:center;
+
 }
