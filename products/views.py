@@ -3,6 +3,11 @@ from .models import Product,Brand,Build,BuildItem
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.db.models import Sum
+from .recommendation_engine import (
+    get_installed_components,
+    get_next_category,
+    get_candidate_products,
+)
 def product_list(request):
     products = Product.objects.all()
     brands = Brand.objects.all()
@@ -114,17 +119,25 @@ def home(request):
             'featured_products': featured_products
         }
     )
+
 def build_page(request):
 
     build = Build.objects.first()
 
     items = BuildItem.objects.filter(build=build)
 
-    total_price = sum(
-        item.product.price
-        for item in items
-    )
+    installed = get_installed_components(build)
 
+    next_category = get_next_category(installed)
+
+    recommended_products = get_candidate_products(
+    installed,
+    next_category)
+    
+    total_price = sum(
+    item.product.price
+    for item in items
+    )
     slots = {
         "CPU": items.filter(product__category="cpu").first(),
         "Motherboard": items.filter(product__category="motherboard").first(),
@@ -401,6 +414,8 @@ def build_page(request):
             "compatibility_messages": compatibility_messages,
             "total_power": total_power,
             "recommended_psu": recommended_psu,
+            "next_category": next_category,
+            "recommended_products": recommended_products,
         },
     )
 def add_to_build(request, product_id):

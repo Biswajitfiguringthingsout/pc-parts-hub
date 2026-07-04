@@ -149,8 +149,66 @@ class Product(models.Model):
     blank=True,
     default=0
     )
-    def __str__(self):
-        return self.name 
+    # Performance
+
+    gaming_score = models.PositiveIntegerField(
+    default=0,
+    help_text="0-100"
+    )
+
+    productivity_score = models.PositiveIntegerField(
+    default=0
+    )
+
+    efficiency_score = models.PositiveIntegerField(
+    default=0
+    )
+
+    release_year = models.PositiveIntegerField(
+    blank=True,
+    null=True
+    )
+
+    tier = models.CharField(
+    max_length=20,
+    blank=True,
+    choices=[
+        ("Entry","Entry"),
+        ("Budget","Budget"),
+        ("Mid Range","Mid Range"),
+        ("High End","High End"),
+        ("Flagship","Flagship"),
+    ]
+    )
+    fps_1080p = models.PositiveIntegerField(
+    blank=True,
+    null=True
+    )
+
+    fps_1440p = models.PositiveIntegerField(
+    blank=True,
+    null=True
+    )
+
+    fps_4k = models.PositiveIntegerField(
+    blank=True,
+    null=True
+    )
+    learning_tip = models.TextField(
+    blank=True
+    )
+    build_order = models.PositiveIntegerField(
+    default=0
+    )
+    difficulty = models.CharField(
+    max_length=20,
+    blank=True,
+    choices=[
+        ("Easy","Easy"),
+        ("Medium","Medium"),
+        ("Hard","Hard")
+    ]
+    )
 
     def __str__(self):
         return self.name

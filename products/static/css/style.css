@@ -1081,30 +1081,51 @@ strong {
 
 .builder-sidebar{
 
-    width:360px;
+    width:100%;
 
-    transition:all .35s ease;
-
-    overflow:hidden;
-
+    box-sizing:border-box;
 }
 
-.builder-sidebar.collapsed{
+.builder-container{
 
-    width:95px;
+    display:grid;
+
+    grid-template-columns:340px 1fr;
+
+    gap:30px;
+
+    transition:.35s;
+}
+
+.builder-container.sidebar-collapsed{
+
+    grid-template-columns:95px 1fr;
 
 }
 
 /* Hide text */
 
-.builder-sidebar.collapsed h4,
-
-.builder-sidebar.collapsed .price,
-
-.builder-sidebar.collapsed .remove-btn{
-
+.builder-container.sidebar-collapsed .builder-sidebar h4,
+.builder-container.sidebar-collapsed .builder-sidebar .price,
+.builder-container.sidebar-collapsed .builder-sidebar .remove-btn{
     display:none;
+}
 
+.builder-container.sidebar-collapsed .builder-sidebar .slot-card{
+    padding:12px;
+    min-height:120px;
+    align-items:center;
+}
+
+.builder-container.sidebar-collapsed .builder-sidebar .slot-image{
+    width:55px;
+    height:55px;
+    margin:10px auto;
+}
+
+.builder-container.sidebar-collapsed .builder-sidebar h3{
+    font-size:14px;
+    text-align:center;
 }
 
 /* Smaller cards */
@@ -1138,5 +1159,55 @@ strong {
     font-size:14px;
 
     text-align:center;
+
+}
+.builder-guide{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+    padding:22px;
+
+    background:var(--card);
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+
+    border:1px solid rgba(0,0,0,.08);
+
+}
+
+.guide-icon{
+
+    font-size:48px;
+
+}
+
+.guide-text h2{
+
+    margin-bottom:8px;
+
+}
+.recommendation-panel{
+
+    margin:35px 0;
+
+    background:var(--card);
+
+    padding:25px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(0,0,0,.08);
+
+}
+
+.recommendation-panel h2{
+
+    margin-bottom:20px;
 
 }

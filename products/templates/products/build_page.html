@@ -6,13 +6,10 @@
 <div class="builder-header">
 
     <div class="header-left">
-        <button
-            id="sidebarToggle"
-            class="menu-btn">
-
+        <button id="sidebarToggle" class="menu-btn">
             ☰
-
         </button>
+
         <h2>{{ build.name }}</h2>
     </div>
 
@@ -33,33 +30,39 @@
 
             {% for name, item in slots.items %}
 
-            <div class="slot-card">
+                <div class="slot-card">
 
-                <h3>{{ name }}</h3>
+                    <h3>{{ name }}</h3>
 
-                {% if item %}
+                    {% if item %}
 
-                    {% if item.product.image %}
-                        <img src="{{ item.product.image.url }}" class="slot-image">
+                        {% if item.product.image %}
+                            <img
+                                src="{{ item.product.image.url }}"
+                                class="slot-image"
+                            >
+                        {% endif %}
+
+                        <h4>{{ item.product.name }}</h4>
+
+                        <p class="price">
+                            ₹{{ item.product.price }}
+                        </p>
+
+                        <a
+                            href="{% url 'remove_build_item' item.id %}"
+                            class="remove-btn"
+                        >
+                            Remove
+                        </a>
+
+                    {% else %}
+
+                        <p>No {{ name }} Selected</p>
+
                     {% endif %}
 
-                    <h4>{{ item.product.name }}</h4>
-
-                    <p class="price">
-                        ₹{{ item.product.price }}
-                    </p>
-
-                    <a href="{% url 'remove_build_item' item.id %}" class="remove-btn">
-                        Remove
-                    </a>
-
-                {% else %}
-
-                    <p>No {{ name }} Selected</p>
-
-                {% endif %}
-
-            </div>
+                </div>
 
             {% endfor %}
 
@@ -71,7 +74,105 @@
 
     <main class="builder-workspace">
 
-        <!-- 3D Preview -->
+        {% if next_category %}
+
+        <div class="builder-guide">
+
+            <div class="guide-icon">
+                🤖
+            </div>
+
+            <div class="guide-text">
+
+                <h2>AI Build Guide</h2>
+
+                <p>
+
+                    Let's start by choosing
+
+                    <strong>{{ next_category|title }}</strong>
+
+                </p>
+
+                <small>
+
+                    Every recommendation becomes smarter as your build grows.
+
+                </small>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ================= AI RECOMMENDATIONS ================= -->
+
+        {% if recommended_products %}
+
+        <section class="recommendation-panel">
+
+            <h2>
+
+                Recommended {{ next_category|title }}
+
+            </h2>
+
+            <div class="build-grid">
+
+                {% for rec in recommended_products %}
+
+                <div class="build-card">
+
+                    {% if rec.product.image %}
+                        <img
+                            src="{{ rec.product.image.url }}"
+                            class="build-image"
+                        >
+                    {% endif %}
+
+                    <h3>{{ rec.product.name }}</h3>
+
+                    <p class="price">
+
+                        ₹{{ rec.product.price }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>AI Score:</strong>
+
+                        {{ rec.score }}
+
+                    </p>
+
+                    <p>
+
+                        {{ rec.reason }}
+
+                    </p>
+
+                    <a
+                        href="{% url 'add_to_build' rec.product.id %}"
+                        class="build-btn"
+                    >
+                        Add To Build
+                    </a>
+
+                </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- ================= 3D PREVIEW ================= -->
 
         <section class="workspace-view">
 
@@ -81,8 +182,10 @@
 
                 <div class="pc-stage">
 
-                    <img src="{% static 'images/pc-placeholder.png' %}"
-                         class="pc-image">
+                    <img
+                        src="{% static 'images/pc-placeholder.png' %}"
+                        class="pc-image"
+                    >
 
                     <div class="pc-overlay">
 
@@ -100,7 +203,8 @@
 
         </section>
 
-        <!-- Dashboard -->
+
+        <!-- ================= DASHBOARD ================= -->
 
         <section class="dashboard-grid">
 
@@ -138,7 +242,8 @@
 
         </section>
 
-        <!-- Compatibility -->
+
+        <!-- ================= COMPATIBILITY ================= -->
 
         <section class="compatibility-panel">
 
@@ -146,63 +251,55 @@
 
                 <h2>System Analysis</h2>
 
-                <span>{{ component_count }}/12 Installed</span>
+                <span>
+
+                    {{ component_count }}/12 Installed
+
+                </span>
 
             </div>
 
             {% for status, message in compatibility_messages %}
 
-                {% if status == "success" %}
+                <div class="compatibility-item {{ status }}">
 
-                    <div class="compatibility-item success">
+                    {% if status == "success" %}
+                        ✔
+                    {% else %}
+                        ✖
+                    {% endif %}
 
-                        ✔ {{ message }}
+                    {{ message }}
 
-                    </div>
-
-                {% else %}
-
-                    <div class="compatibility-item error">
-
-                        ✖ {{ message }}
-
-                    </div>
-
-                {% endif %}
+                </div>
 
             {% endfor %}
 
         </section>
 
-        <!-- Future Tabs -->
+
+        <!-- ================= TABS ================= -->
 
         <section class="builder-tabs">
 
             <button class="active-tab">
-
                 Benchmarks
-
             </button>
 
             <button>
-
                 Thermals
-
             </button>
 
             <button>
-
                 Price History
-
             </button>
 
             <button>
-
                 AI Advisor
-
             </button>
 
         </section>
+
 
         <section class="tab-content">
 
@@ -219,19 +316,22 @@
     </main>
 
 </div>
+
+
 <script>
 
-const sidebar =
-document.getElementById("builderSidebar");
+const sidebar = document.getElementById("builderSidebar");
+const container = document.querySelector(".builder-container");
+const toggle = document.getElementById("sidebarToggle");
 
-const toggle =
-document.getElementById("sidebarToggle");
-
-toggle.addEventListener("click",function(){
+toggle.addEventListener("click", () => {
 
     sidebar.classList.toggle("collapsed");
+
+    container.classList.toggle("sidebar-collapsed");
 
 });
 
 </script>
+
 {% endblock %}
