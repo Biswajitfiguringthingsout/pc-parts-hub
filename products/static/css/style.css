@@ -1211,3 +1211,50 @@ strong {
     margin-bottom:20px;
 
 }
+/* =========================================
+   AI Recommendation Cards
+========================================= */
+
+.recommendation-panel{
+    margin-bottom:30px;
+}
+
+.recommendation-meta{
+    display:flex;
+    gap:10px;
+    margin:15px 0;
+    flex-wrap:wrap;
+}
+
+.score-badge{
+    background:#1677ff;
+    color:white;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.tier-badge{
+    background:#1f2937;
+    color:#38bdf8;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:13px;
+    font-weight:600;
+}
+
+.recommendation-reasons{
+    margin-top:10px;
+    min-height:70px;
+}
+
+.recommendation-reasons p{
+    margin:6px 0;
+}
+
+.build-card .build-btn{
+    width:100%;
+    text-align:center;
+    margin-top:auto;
+}
