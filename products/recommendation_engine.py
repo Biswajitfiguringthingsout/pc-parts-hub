@@ -14,16 +14,6 @@ BUILD_ORDER = [
 
 
 def get_installed_components(build):
-    """Returns installed components as a dictionary.
-
-    Example:
-    {
-        "cpu": cpu_product,
-        "gpu": gpu_product,
-        ...
-    }
-    """
-
     installed = {}
 
     items = BuildItem.objects.filter(build=build)
@@ -35,19 +25,16 @@ def get_installed_components(build):
 
 
 def get_next_category(installed):
-    """Returns the next component the user should install based on
-    the recommended PC building order.
-    """
 
     for category in BUILD_ORDER:
         if category not in installed:
             return category
 
-    # Everything has been installed
     return None
 
 
 def get_candidate_products(installed, next_category):
+
     products = Product.objects.filter(category=next_category)
 
     cpu = installed.get("cpu")
@@ -55,9 +42,9 @@ def get_candidate_products(installed, next_category):
     ram = installed.get("ram")
     gpu = installed.get("gpu")
 
-    # ----------------------------
+    # ----------------------------------------------------
     # Compatibility Filtering
-    # ----------------------------
+    # ----------------------------------------------------
 
     if next_category == "motherboard" and cpu:
         products = products.filter(socket=cpu.socket)
@@ -77,13 +64,52 @@ def get_candidate_products(installed, next_category):
         score = 0
         reasons = []
         badge = "Recommended"
-        # ----------------------------
+
+        # ----------------------------------------------------
+        # Gaming Performance
+        # ----------------------------------------------------
+
+        score += product.gaming_score * 3
+
+        if product.gaming_score >= 90:
+            reasons.append("Excellent gaming")
+            badge = "Gaming Beast"
+
+        elif product.gaming_score >= 75:
+            reasons.append("Strong gaming")
+            badge = "Great Gaming"
+
+        elif product.gaming_score >= 60:
+            reasons.append("Good gaming")
+
+        # ----------------------------------------------------
+        # Productivity
+        # ----------------------------------------------------
+
+        score += product.productivity_score * 2
+
+        if product.productivity_score >= 85:
+            reasons.append("Excellent productivity")
+
+        elif product.productivity_score >= 70:
+            reasons.append("Great productivity")
+
+        # ----------------------------------------------------
+        # Efficiency
+        # ----------------------------------------------------
+
+        score += product.efficiency_score
+
+        if product.efficiency_score >= 85:
+            reasons.append("Power efficient")
+
+        # ----------------------------------------------------
         # Release Year
-        # ----------------------------
+        # ----------------------------------------------------
 
         if product.release_year:
 
-            score += (product.release_year - 2020) * 5
+            score += max(product.release_year - 2020, 0) * 5
 
             if product.release_year >= 2024:
                 reasons.append("Latest generation")
@@ -91,39 +117,9 @@ def get_candidate_products(installed, next_category):
             elif product.release_year >= 2022:
                 reasons.append("Modern platform")
 
-        # ----------------------------
-        # Gaming
-        # ----------------------------
-
-        score += product.gaming_score * 3
-
-        if product.gaming_score >= 90:
-            reasons.append("Excellent gaming")
-            badge = "Gaming Beast"
-        elif product.gaming_score >= 75:
-            reasons.append("Strong gaming")
-            badge = "Great Gaming"
-        # ----------------------------
-        # Productivity
-        # ----------------------------
-
-        score += product.productivity_score * 2
-
-        if product.productivity_score >= 80:
-            reasons.append("Great productivity")
-
-        # ----------------------------
-        # Efficiency
-        # ----------------------------
-
-        score += product.efficiency_score
-
-        if product.efficiency_score >= 80:
-            reasons.append("Power efficient")
-
-        # ----------------------------
-        # Tier
-        # ----------------------------
+        # ----------------------------------------------------
+        # Tier Bonus
+        # ----------------------------------------------------
 
         tier_bonus = {
             "Entry": 5,
@@ -133,55 +129,74 @@ def get_candidate_products(installed, next_category):
             "Flagship": 45,
         }
 
-        if product.tier:
-            score += tier_bonus.get(product.tier, 0)
+        score += tier_bonus.get(product.tier, 0)
 
-        # ----------------------------
-        # Budget Bonus
-        # ----------------------------
+        # ----------------------------------------------------
+        # Value Bonus
+        # ----------------------------------------------------
 
         if product.price:
 
             if product.price < 10000:
                 score += 30
                 reasons.append("Excellent value")
-                badge = "Best Value"
+
+                if badge == "Recommended":
+                    badge = "Best Value"
+
             elif product.price < 20000:
                 score += 20
                 reasons.append("Great value")
-                badge = "Budget Pick"
+
+                if badge == "Recommended":
+                    badge = "Budget Pick"
+
             elif product.price < 40000:
                 score += 10
 
-        # ----------------------------
-        # Build Balance
-        # ----------------------------
+        # ----------------------------------------------------
+        # CPU <-> GPU Balance
+        # ----------------------------------------------------
 
         if next_category == "gpu" and cpu:
 
-            if cpu.gaming_score >= 85 and product.gaming_score >= 85:
-                score += 20
+            difference = abs(
+                cpu.gaming_score - product.gaming_score
+            )
+
+            if difference <= 10:
+                score += 25
                 reasons.append("Perfect CPU pairing")
 
-            elif abs(cpu.gaming_score - product.gaming_score) <= 15:
+            elif difference <= 20:
                 score += 15
                 reasons.append("Balanced with your CPU")
 
         if next_category == "cpu" and gpu:
 
-            if gpu.gaming_score >= 85 and product.gaming_score >= 85:
-                score += 20
+            difference = abs(
+                gpu.gaming_score - product.gaming_score
+            )
+
+            if difference <= 10:
+                score += 25
                 reasons.append("Perfect GPU pairing")
 
-            elif abs(gpu.gaming_score - product.gaming_score) <= 15:
+            elif difference <= 20:
                 score += 15
                 reasons.append("Balanced with your GPU")
+
+        # ----------------------------------------------------
+        # Remove duplicate reasons
+        # ----------------------------------------------------
+
+        reasons = list(dict.fromkeys(reasons))
 
         recommendations.append(
             {
                 "product": product,
                 "score": score,
-                "reason": ", ".join(reasons),
+                "reason": reasons,
                 "badge": badge,
             }
         )
@@ -192,4 +207,3 @@ def get_candidate_products(installed, next_category):
     )
 
     return recommendations[:5]
-

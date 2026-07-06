@@ -133,7 +133,11 @@
                     {% endif %}
 
                     <h3>{{ rec.product.name }}</h3>
+                    <span class="recommendation-badge">
 
+                        {{ rec.badge }}
+
+                    </span>
                     <p class="price">
 
                         ₹{{ rec.product.price }}
@@ -149,10 +153,19 @@
                     </p>
 
                     <div class="recommendation-reasons">
-                        <p>
-                            <strong>Why this is recommended</strong>
-                        </p>
-                        <p>{{ rec.reason }}</p>
+
+                        <p><strong>Why this is recommended</strong></p>
+
+                        <ul>
+
+                            {% for reason in rec.reason %}
+                                <li>✓ {{ reason }}</li>
+                            {% empty %}
+                                <li>Good overall choice</li>
+                            {% endfor %}
+
+                        </ul>
+
                     </div>
                     <div class="recommendation-meta">
                         <span class="score-badge">
