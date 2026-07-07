@@ -3,6 +3,7 @@ from .models import Product,Brand,Build,BuildItem
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.db.models import Sum
+from .ai import analyze_build
 from .recommendation_engine import (
     get_installed_components,
     get_next_category,
@@ -127,7 +128,7 @@ def build_page(request):
     items = BuildItem.objects.filter(build=build)
 
     installed = get_installed_components(build)
-
+    build_analysis = analyze_build(installed)
     next_category = get_next_category(installed)
 
     recommended_products = get_candidate_products(
@@ -416,6 +417,7 @@ def build_page(request):
             "recommended_psu": recommended_psu,
             "next_category": next_category,
             "recommended_products": recommended_products,
+            "build_analysis": build_analysis,
         },
     )
 def add_to_build(request, product_id):

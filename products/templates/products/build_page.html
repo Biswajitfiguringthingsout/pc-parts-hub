@@ -158,10 +158,10 @@
 
                         <ul>
 
-                            {% for reason in rec.reason %}
+                            {% for reason in rec.reasons %}
                                 <li>✓ {{ reason }}</li>
                             {% empty %}
-                                <li>Good overall choice</li>
+                                <li>Recommended choice</li>
                             {% endfor %}
 
                         </ul>
@@ -262,7 +262,15 @@
                 <h2>₹{{ estimated_monthly_power_cost }}</h2>
 
             </div>
+            <div class="dashboard-card">
 
+                <h3>AI Build Rating</h3>
+
+                <h2>{{ build_analysis.score }}/100</h2>
+
+                <p>{{ build_analysis.rating }}</p>
+
+            </div>
         </section>
 
 

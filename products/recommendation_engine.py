@@ -193,12 +193,12 @@ def get_candidate_products(installed, next_category):
         reasons = list(dict.fromkeys(reasons))
 
         recommendations.append(
-            {
-                "product": product,
-                "score": score,
-                "reason": reasons,
-                "badge": badge,
-            }
+        {
+            "product": product,
+            "score": score,
+            "reasons": reasons,
+            "badge": badge,
+        }
         )
 
     recommendations.sort(
