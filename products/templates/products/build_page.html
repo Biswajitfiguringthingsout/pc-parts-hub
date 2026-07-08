@@ -307,7 +307,83 @@
             {% endfor %}
 
         </section>
+        <!-- ================= AI BUILD ADVISOR ================= -->
 
+        <section class="compatibility-panel ai-advisor">
+
+            <div class="ai-score">
+
+                <div>
+
+                    <div class="ai-score-number">
+                        {{ build_analysis.score }}/100
+                    </div>
+
+                    <div class="ai-rating">
+                        {{ build_analysis.rating }}
+                    </div>
+
+                </div>
+
+                <div style="font-size:55px;">
+                    🤖
+                </div>
+
+            </div>
+
+            <div class="ai-summary">
+                {{ build_analysis.summary }}
+            </div>
+
+            <div class="ai-section">
+
+                <h3>💪 Strengths</h3>
+
+                <ul class="ai-list ai-strength">
+
+                    {% for strength in build_analysis.strengths %}
+                        <li>{{ strength }}</li>
+                    {% empty %}
+                        <li>No strengths detected.</li>
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            <div class="ai-section">
+
+                <h3>⚠ Warnings</h3>
+
+                <ul class="ai-list ai-warning">
+
+                    {% for warning in build_analysis.warnings %}
+                        <li>{{ warning }}</li>
+                    {% empty %}
+                        <li>No warnings.</li>
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+            <div class="ai-section">
+
+                <h3>🚀 Suggestions</h3>
+
+                <ul class="ai-list ai-suggestion">
+
+                    {% for suggestion in build_analysis.suggestions %}
+                        <li>{{ suggestion }}</li>
+                    {% empty %}
+                        <li>No suggestions.</li>
+                    {% endfor %}
+
+                </ul>
+
+            </div>
+
+        </section>
 
         <!-- ================= TABS ================= -->
 
@@ -334,13 +410,34 @@
 
         <section class="tab-content">
 
-            <h2>Benchmarks</h2>
+            <h2>Estimated Performance</h2>
 
-            <p>
+            {% if performance %}
 
-                FPS prediction and performance charts will appear here.
+                <div class="dashboard-grid">
 
-            </p>
+                    <div class="dashboard-card">
+                        <h3>1080p Ultra</h3>
+                        <h2>{{ performance.1080p }} FPS</h2>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>1440p Ultra</h3>
+                        <h2>{{ performance.1440p }} FPS</h2>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>4K Ultra</h3>
+                        <h2>{{ performance.4k }} FPS</h2>
+                    </div>
+
+                </div>
+
+            {% else %}
+
+                <p>Add a GPU to estimate gaming performance.</p>
+
+            {% endif %}
 
         </section>
 

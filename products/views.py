@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.db.models import Sum
 from .ai import analyze_build
+from .performance import estimate_performance
 from .recommendation_engine import (
     get_installed_components,
     get_next_category,
@@ -130,7 +131,7 @@ def build_page(request):
     installed = get_installed_components(build)
     build_analysis = analyze_build(installed)
     next_category = get_next_category(installed)
-
+    performance = estimate_performance(installed)
     recommended_products = get_candidate_products(
     installed,
     next_category)
@@ -418,6 +419,7 @@ def build_page(request):
             "next_category": next_category,
             "recommended_products": recommended_products,
             "build_analysis": build_analysis,
+            "performance": performance,
         },
     )
 def add_to_build(request, product_id):
