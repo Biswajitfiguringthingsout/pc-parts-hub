@@ -75,374 +75,243 @@
     <main class="builder-workspace">
 
         {% if next_category %}
+            <div class="builder-guide">
+                <div class="guide-icon">
+                    🤖
+                </div>
 
-        <div class="builder-guide">
-
-            <div class="guide-icon">
-                🤖
+                <div class="guide-text">
+                    <h2>AI Build Guide</h2>
+                    <p>
+                        Let's start by choosing
+                        <strong>{{ next_category|title }}</strong>
+                    </p>
+                    <small>
+                        Every recommendation becomes smarter as your build grows.
+                    </small>
+                </div>
             </div>
-
-            <div class="guide-text">
-
-                <h2>AI Build Guide</h2>
-
-                <p>
-
-                    Let's start by choosing
-
-                    <strong>{{ next_category|title }}</strong>
-
-                </p>
-
-                <small>
-
-                    Every recommendation becomes smarter as your build grows.
-
-                </small>
-
-            </div>
-
-        </div>
-
         {% endif %}
-
 
         <!-- ================= AI RECOMMENDATIONS ================= -->
 
         {% if recommended_products %}
+            <section class="recommendation-panel">
+                <h2>Recommended {{ next_category|title }}</h2>
+                <div class="build-grid">
+                    {% for rec in recommended_products %}
+                        <div class="build-card">
+                            {% if rec.product.image %}
+                                <img
+                                    src="{{ rec.product.image.url }}"
+                                    class="build-image"
+                                >
+                            {% endif %}
 
-        <section class="recommendation-panel">
-
-            <h2>
-
-                Recommended {{ next_category|title }}
-
-            </h2>
-
-            <div class="build-grid">
-
-                {% for rec in recommended_products %}
-
-                <div class="build-card">
-
-                    {% if rec.product.image %}
-                        <img
-                            src="{{ rec.product.image.url }}"
-                            class="build-image"
-                        >
-                    {% endif %}
-
-                    <h3>{{ rec.product.name }}</h3>
-                    <span class="recommendation-badge">
-
-                        {{ rec.badge }}
-
-                    </span>
-                    <p class="price">
-
-                        ₹{{ rec.product.price }}
-
-                    </p>
-
-                    <p>
-
-                        <strong>AI Score:</strong>
-
-                        {{ rec.score }}
-
-                    </p>
-
-                    <div class="recommendation-reasons">
-
-                        <p><strong>Why this is recommended</strong></p>
-
-                        <ul>
-
-                            {% for reason in rec.reasons %}
-                                <li>✓ {{ reason }}</li>
-                            {% empty %}
-                                <li>Recommended choice</li>
-                            {% endfor %}
-
-                        </ul>
-
-                    </div>
-                    <div class="recommendation-meta">
-                        <span class="score-badge">
-                            AI Score {{ rec.score }}
-                        </span>
-                        {% if rec.product.tier %}
-                            <span class="tier-badge">
-                                {{ rec.product.tier }}
+                            <h3>{{ rec.product.name }}</h3>
+                            <span class="recommendation-badge">
+                                {{ rec.badge }}
                             </span>
-                        {% endif %}
-                    </div>
-                    <a
-                        href="{% url 'add_to_build' rec.product.id %}"
-                        class="build-btn"
-                    >
-                        Add To Build
-                    </a>
-
+                            <p class="price">₹{{ rec.product.price }}</p>
+                            <p>
+                                <strong>AI Score:</strong>
+                                {{ rec.score }}
+                            </p>
+                            <div class="recommendation-reasons">
+                                <p><strong>Why this is recommended</strong></p>
+                                <ul>
+                                    {% for reason in rec.reasons %}
+                                        <li>✓ {{ reason }}</li>
+                                    {% empty %}
+                                        <li>Recommended choice</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="recommendation-meta">
+                                <span class="score-badge">
+                                    AI Score {{ rec.score }}
+                                </span>
+                                {% if rec.product.tier %}
+                                    <span class="tier-badge">
+                                        {{ rec.product.tier }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <a
+                                href="{% url 'add_to_build' rec.product.id %}"
+                                class="build-btn"
+                            >
+                                Add To Build
+                            </a>
+                        </div>
+                    {% endfor %}
                 </div>
-
-                {% endfor %}
-
-            </div>
-
-        </section>
-
+            </section>
         {% endif %}
-
 
         <!-- ================= 3D PREVIEW ================= -->
 
         <section class="workspace-view">
-
             <h2>Interactive Builder</h2>
-
             <div class="pc-preview">
-
                 <div class="pc-stage">
-
                     <img
                         src="{% static 'images/pc-placeholder.png' %}"
                         class="pc-image"
                     >
-
                     <div class="pc-overlay">
-
-                        <span class="overlay-text">
-
-                            Interactive Builder
-
-                        </span>
-
+                        <span class="overlay-text">Interactive Builder</span>
                     </div>
-
                 </div>
-
             </div>
-
         </section>
-
 
         <!-- ================= DASHBOARD ================= -->
 
         <section class="dashboard-grid">
-
             <div class="dashboard-card">
-
                 <h3>Total Price</h3>
-
                 <h2>₹{{ total_price }}</h2>
-
             </div>
-
             <div class="dashboard-card">
-
                 <h3>Power Draw</h3>
-
                 <h2>{{ total_power }} W</h2>
-
             </div>
-
             <div class="dashboard-card">
-
                 <h3>Recommended PSU</h3>
-
                 <h2>{{ recommended_psu }} W</h2>
-
             </div>
-
             <div class="dashboard-card">
-
                 <h3>Monthly Cost</h3>
-
                 <h2>₹{{ estimated_monthly_power_cost }}</h2>
-
             </div>
             <div class="dashboard-card">
-
                 <h3>AI Build Rating</h3>
-
                 <h2>{{ build_analysis.score }}/100</h2>
-
                 <p>{{ build_analysis.rating }}</p>
-
             </div>
         </section>
-
 
         <!-- ================= COMPATIBILITY ================= -->
 
         <section class="compatibility-panel">
-
             <div class="panel-title">
-
                 <h2>System Analysis</h2>
-
-                <span>
-
-                    {{ component_count }}/12 Installed
-
-                </span>
-
+                <span>{{ component_count }}/12 Installed</span>
             </div>
 
             {% for status, message in compatibility_messages %}
-
                 <div class="compatibility-item {{ status }}">
-
                     {% if status == "success" %}
                         ✔
                     {% else %}
                         ✖
                     {% endif %}
-
                     {{ message }}
-
                 </div>
-
             {% endfor %}
-
         </section>
+
         <!-- ================= AI BUILD ADVISOR ================= -->
 
         <section class="compatibility-panel ai-advisor">
-
             <div class="ai-score">
-
                 <div>
-
                     <div class="ai-score-number">
                         {{ build_analysis.score }}/100
                     </div>
-
                     <div class="ai-rating">
                         {{ build_analysis.rating }}
                     </div>
-
                 </div>
-
-                <div style="font-size:55px;">
-                    🤖
-                </div>
-
+                <div style="font-size:55px;">🤖</div>
             </div>
 
-            <div class="ai-summary">
-                {{ build_analysis.summary }}
-            </div>
+            <div class="ai-summary">{{ build_analysis.summary }}</div>
 
             <div class="ai-section">
-
                 <h3>💪 Strengths</h3>
-
                 <ul class="ai-list ai-strength">
-
                     {% for strength in build_analysis.strengths %}
                         <li>{{ strength }}</li>
                     {% empty %}
                         <li>No strengths detected.</li>
                     {% endfor %}
-
                 </ul>
-
             </div>
 
             <div class="ai-section">
-
                 <h3>⚠ Warnings</h3>
-
                 <ul class="ai-list ai-warning">
-
                     {% for warning in build_analysis.warnings %}
                         <li>{{ warning }}</li>
                     {% empty %}
                         <li>No warnings.</li>
                     {% endfor %}
-
                 </ul>
-
             </div>
 
             <div class="ai-section">
-
                 <h3>🚀 Suggestions</h3>
-
                 <ul class="ai-list ai-suggestion">
-
                     {% for suggestion in build_analysis.suggestions %}
                         <li>{{ suggestion }}</li>
                     {% empty %}
                         <li>No suggestions.</li>
                     {% endfor %}
-
                 </ul>
-
             </div>
-
         </section>
 
         <!-- ================= TABS ================= -->
 
         <section class="builder-tabs">
-
-            <button class="active-tab">
-                Benchmarks
-            </button>
-
-            <button>
-                Thermals
-            </button>
-
-            <button>
-                Price History
-            </button>
-
-            <button>
-                AI Advisor
-            </button>
-
+            <button class="active-tab">Benchmarks</button>
+            <button>Thermals</button>
+            <button>Price History</button>
+            <button>AI Advisor</button>
         </section>
-
 
         <section class="tab-content">
-
-            <h2>Estimated Performance</h2>
-
-            {% if performance %}
-
-                <div class="dashboard-grid">
-
-                    <div class="dashboard-card">
-                        <h3>1080p Ultra</h3>
-                        <h2>{{ performance.1080p }} FPS</h2>
-                    </div>
-
-                    <div class="dashboard-card">
-                        <h3>1440p Ultra</h3>
-                        <h2>{{ performance.1440p }} FPS</h2>
-                    </div>
-
-                    <div class="dashboard-card">
-                        <h3>4K Ultra</h3>
-                        <h2>{{ performance.4k }} FPS</h2>
-                    </div>
-
+            <h2>🎮 Estimated Gaming Performance</h2>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>1080p Ultra</h3>
+                    <h2>{{ performance.fps_1080p }} FPS</h2>
                 </div>
-
-            {% else %}
-
-                <p>Add a GPU to estimate gaming performance.</p>
-
-            {% endif %}
-
+                <div class="dashboard-card">
+                    <h3>1440p Ultra</h3>
+                    <h2>{{ performance.fps_1440p }} FPS</h2>
+                </div>
+                <div class="dashboard-card">
+                    <h3>4K Ultra</h3>
+                    <h2>{{ performance.fps_4k }} FPS</h2>
+                </div>
+            </div>
+            <br>
+            <div class="compatibility-panel">
+                <h2>⚙ Performance Analysis</h2>
+                <p>{{ performance.summary }}</p>
+                {% if performance.cpu_bottleneck %}
+                    <div class="compatibility-item error">
+                        CPU Bottleneck
+                        <strong>{{ performance.cpu_bottleneck }}%</strong>
+                    </div>
+                {% endif %}
+                {% if performance.gpu_bottleneck %}
+                    <div class="compatibility-item error">
+                        GPU Bottleneck
+                        <strong>{{ performance.gpu_bottleneck }}%</strong>
+                    </div>
+                {% endif %}
+                {% if not performance.cpu_bottleneck and not performance.gpu_bottleneck %}
+                    <div class="compatibility-item success">
+                        ✔ Perfect CPU and GPU balance
+                    </div>
+                {% endif %}
+            </div>
         </section>
-
     </main>
-
 </div>
 
 
