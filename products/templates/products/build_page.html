@@ -288,26 +288,55 @@
                     <h2>{{ performance.fps_4k }} FPS</h2>
                 </div>
             </div>
+
             <br>
+
             <div class="compatibility-panel">
                 <h2>⚙ Performance Analysis</h2>
                 <p>{{ performance.summary }}</p>
+
                 {% if performance.cpu_bottleneck %}
                     <div class="compatibility-item error">
                         CPU Bottleneck
                         <strong>{{ performance.cpu_bottleneck }}%</strong>
                     </div>
                 {% endif %}
+
                 {% if performance.gpu_bottleneck %}
                     <div class="compatibility-item error">
                         GPU Bottleneck
                         <strong>{{ performance.gpu_bottleneck }}%</strong>
                     </div>
                 {% endif %}
+
                 {% if not performance.cpu_bottleneck and not performance.gpu_bottleneck %}
                     <div class="compatibility-item success">
                         ✔ Perfect CPU and GPU balance
                     </div>
+                {% endif %}
+            </div>
+
+            <div class="compatibility-panel">
+                <h2>🎮 Game Benchmarks</h2>
+
+                {% if benchmarks %}
+                    <table>
+                        <tr>
+                            <th>Game</th>
+                            <th>Resolution</th>
+                            <th>FPS</th>
+                        </tr>
+
+                        {% for benchmark in benchmarks %}
+                            <tr>
+                                <td>{{ benchmark.game }}</td>
+                                <td>{{ benchmark.resolution }}</td>
+                                <td>{{ benchmark.fps }} FPS</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <p>No benchmark data available.</p>
                 {% endif %}
             </div>
         </section>

@@ -232,3 +232,11 @@ class BuildItem(models.Model):
     def __str__(self):
         return f"{self.build.name} - {self.product.name}"
     
+class Benchmark(models.Model):
+    gpu = models.ForeignKey(Product, on_delete=models.CASCADE)
+    game = models.CharField(max_length=100)
+    resolution = models.CharField(max_length=20)
+    fps = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.gpu.name} - {self.game} ({self.resolution})"

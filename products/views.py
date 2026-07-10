@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.db.models import Sum
 from .ai import analyze_build
 from .performance import estimate_performance
+from .models import Benchmark
 from .compatibility import check_compatibility
 from .recommendation_engine import (
     get_installed_components,
@@ -156,6 +157,13 @@ def build_page(request):
         "Mouse": items.filter(product__category="mouse").first(),
         "Headset": items.filter(product__category="headset").first(),
     }
+    gpu_item = slots["GPU"]
+
+    benchmarks = []
+
+    if gpu_item:
+        benchmarks = Benchmark.objects.filter(
+            gpu=gpu_item.product)
 
     # ==========================================
     # Compatibility Engine
@@ -193,6 +201,7 @@ def build_page(request):
             "recommended_products": recommended_products,
             "build_analysis": build_analysis,
             "performance": performance,
+            "benchmarks": benchmarks,
         },
     )
 def add_to_build(request, product_id):
