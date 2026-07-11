@@ -21,8 +21,13 @@ urlpatterns = [
         name='add_to_build'
     ),
     path(
-    'build/remove/<int:item_id>/',
-    views.remove_build_item,
-    name='remove_build_item'
-),
+        'build/remove/<int:item_id>/',
+        views.remove_build_item,
+        name='remove_build_item'
+    ),
+    path(
+        "compare-gpus/",
+        views.compare_gpus,
+        name="compare_gpus",
+    ),
 ]

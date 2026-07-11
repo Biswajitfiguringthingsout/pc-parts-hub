@@ -266,13 +266,14 @@
         <!-- ================= TABS ================= -->
 
         <section class="builder-tabs">
-            <button class="active-tab">Benchmarks</button>
-            <button>Thermals</button>
-            <button>Price History</button>
-            <button>AI Advisor</button>
+            <button class="tab-btn active-tab" data-tab="benchmarks">Benchmarks</button>
+            <button class="tab-btn" data-tab="compare">Compare</button>
+            <button class="tab-btn" data-tab="thermals">Thermals</button>
+            <button class="tab-btn" data-tab="price">Price History</button>
+            <button class="tab-btn" data-tab="ai">AI Advisor</button>
         </section>
 
-        <section class="tab-content">
+        <section class="tab-panel active-panel" id="benchmarks">
             <h2>🎮 Estimated Gaming Performance</h2>
             <div class="dashboard-grid">
                 <div class="dashboard-card">
@@ -288,7 +289,7 @@
                     <h2>{{ performance.fps_4k }} FPS</h2>
                 </div>
             </div>
-
+            
             <br>
 
             <div class="compatibility-panel">
@@ -320,44 +321,255 @@
                 <h2>🎮 Game Benchmarks</h2>
 
                 {% if benchmarks %}
-                    <table>
-                        <tr>
-                            <th>Game</th>
-                            <th>Resolution</th>
-                            <th>FPS</th>
-                        </tr>
-
-                        {% for benchmark in benchmarks %}
-                            <tr>
-                                <td>{{ benchmark.game }}</td>
-                                <td>{{ benchmark.resolution }}</td>
-                                <td>{{ benchmark.fps }} FPS</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+                    {% for game, results in benchmarks.items %}
+                        <div class="benchmark-group">
+                            <h3>{{ game }}</h3>
+                            <table>
+                                <tr>
+                                    <th>Resolution</th>
+                                    <th>FPS</th>
+                                </tr>
+                                {% for benchmark in results %}
+                                    <tr>
+                                        <td>{{ benchmark.resolution }}</td>
+                                        <td>{{ benchmark.fps }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    {% endfor %}
                 {% else %}
                     <p>No benchmark data available.</p>
                 {% endif %}
             </div>
+            <section class="compare-panel">
+
+                <h2>⚔ Compare Components</h2>
+
+                <div class="compare-controls">
+
+                    <!-- We'll add dropdowns here -->
+
+                </div>
+
+            </section>
         </section>
+        <section class="tab-panel" id="compare">
+
+    <div class="compatibility-panel">
+
+        <h2>⚔ GPU Comparison</h2>
+
+        <div class="compare-form">
+
+            <div class="compare-select">
+
+                <label>GPU 1</label>
+
+                <select id="gpu1">
+
+                    {% for gpu in gpus %}
+                        <option value="{{ gpu.id }}">
+                            {{ gpu.name }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="compare-select">
+
+                <label>GPU 2</label>
+
+                <select id="gpu2">
+
+                    {% for gpu in gpus %}
+                        <option value="{{ gpu.id }}">
+                            {{ gpu.name }}
+                        </option>
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <button
+                id="compare-btn"
+                class="build-btn"
+            >
+                Compare
+            </button>
+
+        </div>
+
+        <div id="comparison-result">
+
+            <p>Select two GPUs and press Compare.</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="tab-panel" id="thermals">
+
+    <div class="compatibility-panel">
+        <h2>🌡 Thermals</h2>
+
+        <p>Thermals coming soon...</p>
+    </div>
+
+</section>
+
+<section class="tab-panel" id="price">
+
+    <div class="compatibility-panel">
+        <h2>💰 Price History</h2>
+
+        <p>Price history coming soon...</p>
+    </div>
+
+</section>
+
+<section class="tab-panel" id="ai">
+
+    <div class="compatibility-panel">
+        <h2>🤖 AI Advisor</h2>
+
+        <p>AI comparison coming soon...</p>
+    </div>
+
+</section>
     </main>
 </div>
 
 
 <script>
-
 const sidebar = document.getElementById("builderSidebar");
 const container = document.querySelector(".builder-container");
 const toggle = document.getElementById("sidebarToggle");
 
 toggle.addEventListener("click", () => {
-
     sidebar.classList.toggle("collapsed");
-
     container.classList.toggle("sidebar-collapsed");
-
 });
 
+const tabButtons = document.querySelectorAll(".tab-btn");
+const tabPanels = document.querySelectorAll(".tab-panel");
+
+tabButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        tabButtons.forEach((btn) => btn.classList.remove("active-tab"));
+        tabPanels.forEach((panel) => panel.classList.remove("active-panel"));
+
+        button.classList.add("active-tab");
+        document.getElementById(button.dataset.tab).classList.add("active-panel");
+    });
+});
+
+const compareButton = document.getElementById("compare-btn");
+const comparisonResult = document.getElementById("comparison-result");
+
+compareButton.addEventListener("click", async () => {
+
+    const gpu1Id = document.getElementById("gpu1").value;
+    const gpu2Id = document.getElementById("gpu2").value;
+
+    if (!gpu1Id || !gpu2Id || gpu1Id === gpu2Id) {
+
+        comparisonResult.innerHTML =
+            "<p>Please choose two different GPUs.</p>";
+
+        return;
+    }
+
+    const response = await fetch(
+        `{% url 'compare_gpus' %}?gpu1=${gpu1Id}&gpu2=${gpu2Id}`
+    );
+
+    const data = await response.json();
+
+    let html = `
+
+    <table class="compare-table">
+
+        <tr>
+            <th>Specification</th>
+            <th>${data.gpu1.name}</th>
+            <th>${data.gpu2.name}</th>
+            <th>Winner</th>
+        </tr>
+
+        <tr>
+            <td>Price</td>
+            <td>₹${data.gpu1.price}</td>
+            <td>₹${data.gpu2.price}</td>
+            <td>🏆 ${data.winner.price}</td>
+        </tr>
+
+        <tr>
+            <td>Gaming Score</td>
+            <td>${data.gpu1.gaming_score}</td>
+            <td>${data.gpu2.gaming_score}</td>
+            <td>🏆 ${data.winner.gaming_score}</td>
+        </tr>
+
+        <tr>
+            <td>Power Draw</td>
+            <td>${data.gpu1.power_draw} W</td>
+            <td>${data.gpu2.power_draw} W</td>
+            <td>🏆 ${data.winner.power_draw}</td>
+        </tr>
+
+    </table>
+
+    <br>
+
+    <h3>🎮 Game Benchmarks</h3>
+
+    <table class="compare-table">
+
+        <tr>
+
+            <th>Game</th>
+            <th>Resolution</th>
+            <th>${data.gpu1.name}</th>
+            <th>${data.gpu2.name}</th>
+            <th>Winner</th>
+
+        </tr>
+
+    `;
+
+    data.benchmarks.forEach(bench => {
+
+        html += `
+
+        <tr>
+
+            <td>${bench.game}</td>
+
+            <td>${bench.resolution}</td>
+
+            <td>${bench.gpu1_fps} FPS</td>
+
+            <td>${bench.gpu2_fps} FPS</td>
+
+            <td>🏆 ${bench.winner}</td>
+
+        </tr>
+
+        `;
+
+    });
+
+    html += "</table>";
+
+    comparisonResult.innerHTML = html;
+
+});
 </script>
 
 {% endblock %}

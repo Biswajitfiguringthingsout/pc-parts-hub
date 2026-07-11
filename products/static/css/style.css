@@ -1533,3 +1533,74 @@ strong {
     background:rgba(255,255,255,.04);
 
 }
+.tab-panel{
+    display:none;
+}
+
+.active-panel{
+    display:block;
+}
+.compare-form{
+
+    display:flex;
+    gap:20px;
+    align-items:end;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+
+}
+
+.compare-select{
+
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+
+}
+
+.compare-select select{
+
+    width:260px;
+    padding:10px;
+    border-radius:8px;
+    background:#20242d;
+    color:white;
+    border:1px solid #3b4455;
+
+}
+
+.compare-table{
+
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+
+}
+
+.compare-table th{
+
+    background:#2b3240;
+    padding:14px;
+    text-align:center;
+
+}
+
+.compare-table td{
+
+    padding:14px;
+    text-align:center;
+    border-top:1px solid #343d4d;
+
+}
+
+.compare-table tr:hover{
+
+    background:#20252f;
+
+}
+
+.compare-table td:first-child{
+
+    font-weight:bold;
+
+}
