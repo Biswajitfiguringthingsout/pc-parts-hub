@@ -133,7 +133,7 @@ def build_page(request):
     build = Build.objects.first()
 
     items = BuildItem.objects.filter(build=build)
-
+    cpus = Product.objects.filter(category="cpu")
     installed = get_installed_components(build)
     build_analysis = analyze_build(installed)
     next_category = get_next_category(installed)
@@ -215,6 +215,7 @@ def build_page(request):
             "performance": performance,
             "benchmarks": benchmarks,
             "gpus": gpus,
+            "cpus": cpus,
         },
     )
 
@@ -272,52 +273,144 @@ def compare_gpus(request):
 
     gpu1 = Product.objects.get(id=gpu1_id)
     gpu2 = Product.objects.get(id=gpu2_id)
+
     gpu1_benchmarks = Benchmark.objects.filter(gpu=gpu1)
     gpu2_benchmarks = Benchmark.objects.filter(gpu=gpu2)
+    gpu1_total_fps = 0
+    gpu2_total_fps = 0
+    benchmark_count = 0
 
-    benchmarks = []
+
+    benchmarks = {}
 
     for bench1 in gpu1_benchmarks:
 
-        bench2 = gpu2_benchmarks.filter(game=bench1.game,resolution=bench1.resolution).first()
+        bench2 = gpu2_benchmarks.filter(
+            game=bench1.game,
+            resolution=bench1.resolution
+        ).first()
+        if bench2:
+            gpu1_total_fps += bench1.fps
+            gpu2_total_fps += bench2.fps
+            benchmark_count += 1
 
-    benchmarks.append({
+        if bench1.game not in benchmarks:
+            benchmarks[bench1.game] = []
 
-        "game": bench1.game,
-        "resolution": bench1.resolution,
-        "gpu1_fps": bench1.fps,
-        "gpu2_fps": bench2.fps if bench2 else "-",
+        benchmarks[bench1.game].append({
 
-        "winner": (
-            gpu1.name
-            if not bench2 or bench1.fps > bench2.fps
-            else gpu2.name
-        )
+            "resolution": bench1.resolution,
+            "gpu1_fps": bench1.fps,
+            "gpu2_fps": bench2.fps if bench2 else "-",
 
-    })
+            "winner": (
+                gpu1.name
+                if not bench2 or bench1.fps > bench2.fps
+                else gpu2.name
+            )
+
+        })
+
     winner = {
-    "price": gpu1.name if gpu1.price < gpu2.price else gpu2.name,
-    "gaming_score": gpu1.name if gpu1.gaming_score > gpu2.gaming_score else gpu2.name,
-    "power_draw": gpu1.name if gpu1.power_draw < gpu2.power_draw else gpu2.name,
-}
+
+        "price": gpu1.name if gpu1.price < gpu2.price else gpu2.name,
+        "gaming_score": gpu1.name if gpu1.gaming_score > gpu2.gaming_score else gpu2.name,
+        "power_draw": gpu1.name if gpu1.power_draw < gpu2.power_draw else gpu2.name,
+
+    }
+    avg_gpu1 = round(gpu1_total_fps / benchmark_count) if benchmark_count else 0
+    avg_gpu2 = round(gpu2_total_fps / benchmark_count) if benchmark_count else 0
+
+    overall_winner = gpu1.name if avg_gpu1 > avg_gpu2 else gpu2.name
+
+    performance_difference = 0
+
+    if avg_gpu1 and avg_gpu2:
+
+        if avg_gpu1 > avg_gpu2:
+            performance_difference = round(
+                ((avg_gpu1 - avg_gpu2) / avg_gpu2) * 100
+            )
+        else:
+            performance_difference = round(
+                ((avg_gpu2 - avg_gpu1) / avg_gpu1) * 100
+            )
+
+    return JsonResponse({
+        "gpu1": {
+            "name": gpu1.name,
+            "price": float(gpu1.price),
+            "gaming_score": gpu1.gaming_score,
+            "power_draw": gpu1.power_draw,
+        },
+        "gpu2": {
+            "name": gpu2.name,
+            "price": float(gpu2.price),
+            "gaming_score": gpu2.gaming_score,
+            "power_draw": gpu2.power_draw,
+        },
+        "winner": winner,
+        "benchmarks": benchmarks,
+        "average_fps": {
+            "gpu1": avg_gpu1,
+            "gpu2": avg_gpu2,
+        },
+        "overall_winner": overall_winner,
+        "performance_difference": performance_difference,
+    })
+def compare_cpus(request):
+
+    cpu1_id = request.GET.get("cpu1")
+    cpu2_id = request.GET.get("cpu2")
+
+    cpu1 = Product.objects.get(id=cpu1_id)
+    cpu2 = Product.objects.get(id=cpu2_id)
+
+    winner = {
+
+        "price":
+            cpu1.name if cpu1.price < cpu2.price else cpu2.name,
+
+        "gaming_score":
+            cpu1.name if cpu1.gaming_score > cpu2.gaming_score else cpu2.name,
+
+        "productivity_score":
+            cpu1.name if cpu1.productivity_score > cpu2.productivity_score else cpu2.name,
+
+        "power_draw":
+            cpu1.name if cpu1.power_draw < cpu2.power_draw else cpu2.name,
+
+        "release_year":
+            cpu1.name if cpu1.release_year > cpu2.release_year else cpu2.name,
+
+    }
 
     return JsonResponse({
 
-    "gpu1": {
-        "name": gpu1.name,
-        "price": float(gpu1.price),
-        "gaming_score": gpu1.gaming_score,
-        "power_draw": gpu1.power_draw,
-    },
+        "cpu1":{
 
-    "gpu2": {
-        "name": gpu2.name,
-        "price": float(gpu2.price),
-        "gaming_score": gpu2.gaming_score,
-        "power_draw": gpu2.power_draw,
-    },
+            "name":cpu1.name,
+            "price":float(cpu1.price),
+            "gaming_score":cpu1.gaming_score,
+            "productivity_score":cpu1.productivity_score,
+            "power_draw":cpu1.power_draw,
+            "release_year":cpu1.release_year,
+            "tier":cpu1.tier,
 
-    "winner": winner,
-    "benchmarks": benchmarks,
+        },
 
-})
+        "cpu2":{
+
+            "name":cpu2.name,
+            "price":float(cpu2.price),
+            "gaming_score":cpu2.gaming_score,
+            "productivity_score":cpu2.productivity_score,
+            "power_draw":cpu2.power_draw,
+            "release_year":cpu2.release_year,
+            "tier":cpu2.tier,
+
+        },
+
+        "winner":winner,
+
+    })

@@ -355,63 +355,78 @@
             </section>
         </section>
         <section class="tab-panel" id="compare">
+            <div class="compatibility-panel">
+                <h2>⚔ GPU Comparison</h2>
 
-    <div class="compatibility-panel">
+                <div class="compare-form">
+                    <div class="compare-select">
+                        <label>GPU 1</label>
+                        <select id="gpu1">
+                            {% for gpu in gpus %}
+                                <option value="{{ gpu.id }}">
+                                    {{ gpu.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-        <h2>⚔ GPU Comparison</h2>
+                    <div class="compare-select">
+                        <label>GPU 2</label>
+                        <select id="gpu2">
+                            {% for gpu in gpus %}
+                                <option value="{{ gpu.id }}">
+                                    {{ gpu.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-        <div class="compare-form">
+                    <button id="compare-btn" class="build-btn">
+                        Compare
+                    </button>
+                </div>
 
-            <div class="compare-select">
-
-                <label>GPU 1</label>
-
-                <select id="gpu1">
-
-                    {% for gpu in gpus %}
-                        <option value="{{ gpu.id }}">
-                            {{ gpu.name }}
-                        </option>
-                    {% endfor %}
-
-                </select>
-
+                <div id="comparison-result">
+                    <p>Select two GPUs and press Compare.</p>
+                </div>
             </div>
 
-            <div class="compare-select">
+            <div class="compatibility-panel">
+                <h2>🧠 CPU Comparison</h2>
 
-                <label>GPU 2</label>
+                <div class="compare-form">
+                    <div class="compare-select">
+                        <label>CPU 1</label>
+                        <select id="cpu1">
+                            {% for cpu in cpus %}
+                                <option value="{{ cpu.id }}">
+                                    {{ cpu.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                <select id="gpu2">
+                    <div class="compare-select">
+                        <label>CPU 2</label>
+                        <select id="cpu2">
+                            {% for cpu in cpus %}
+                                <option value="{{ cpu.id }}">
+                                    {{ cpu.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
-                    {% for gpu in gpus %}
-                        <option value="{{ gpu.id }}">
-                            {{ gpu.name }}
-                        </option>
-                    {% endfor %}
+                    <button id="compare-cpu-btn" class="build-btn">
+                        Compare CPUs
+                    </button>
+                </div>
 
-                </select>
-
+                <div id="cpu-comparison-result">
+                    <p>Select two CPUs.</p>
+                </div>
             </div>
-
-            <button
-                id="compare-btn"
-                class="build-btn"
-            >
-                Compare
-            </button>
-
-        </div>
-
-        <div id="comparison-result">
-
-            <p>Select two GPUs and press Compare.</p>
-
-        </div>
-
-    </div>
-
-</section>
+        </section>
 
 <section class="tab-panel" id="thermals">
 
@@ -472,104 +487,239 @@ tabButtons.forEach((button) => {
 const compareButton = document.getElementById("compare-btn");
 const comparisonResult = document.getElementById("comparison-result");
 
-compareButton.addEventListener("click", async () => {
+if (compareButton && comparisonResult) {
+    compareButton.addEventListener("click", async () => {
+        const gpu1Id = document.getElementById("gpu1").value;
+        const gpu2Id = document.getElementById("gpu2").value;
 
-    const gpu1Id = document.getElementById("gpu1").value;
-    const gpu2Id = document.getElementById("gpu2").value;
+        if (!gpu1Id || !gpu2Id || gpu1Id === gpu2Id) {
+            comparisonResult.innerHTML =
+                "<p>Please choose two different GPUs.</p>";
+            return;
+        }
 
-    if (!gpu1Id || !gpu2Id || gpu1Id === gpu2Id) {
+        try {
+            const response = await fetch(
+                `{% url 'compare_gpus' %}?gpu1=${gpu1Id}&gpu2=${gpu2Id}`
+            );
 
-        comparisonResult.innerHTML =
-            "<p>Please choose two different GPUs.</p>";
+            if (!response.ok) {
+                throw new Error("Request failed");
+            }
 
-        return;
-    }
+            const data = await response.json();
 
-    const response = await fetch(
-        `{% url 'compare_gpus' %}?gpu1=${gpu1Id}&gpu2=${gpu2Id}`
-    );
+            if (data.error) {
+                comparisonResult.innerHTML = `<p>${data.error}</p>`;
+                return;
+            }
 
-    const data = await response.json();
+            let html = `
+                <table class="compare-table">
+                    <tr>
+                        <th>Specification</th>
+                        <th>${data.gpu1.name}</th>
+                        <th>${data.gpu2.name}</th>
+                        <th>Winner</th>
+                    </tr>
+                    <tr>
+                        <td>Price</td>
+                        <td>₹${data.gpu1.price}</td>
+                        <td>₹${data.gpu2.price}</td>
+                        <td>🏆 ${data.winner.price}</td>
+                    </tr>
+                    <tr>
+                        <td>Gaming Score</td>
+                        <td>${data.gpu1.gaming_score}</td>
+                        <td>${data.gpu2.gaming_score}</td>
+                        <td>🏆 ${data.winner.gaming_score}</td>
+                    </tr>
+                    <tr>
+                        <td>Power Draw</td>
+                        <td>${data.gpu1.power_draw} W</td>
+                        <td>${data.gpu2.power_draw} W</td>
+                        <td>🏆 ${data.winner.power_draw}</td>
+                    </tr>
+                </table>
+                <br>
+            `;
 
-    let html = `
+            html += `
+                <div class="overall-summary">
+                    <h2>🏆 Overall Winner</h2>
+                    <h3>${data.overall_winner}</h3>
+                    <p>
+                        Average FPS
+                        <strong>
+                            ${data.average_fps.gpu1}
+                            vs
+                            ${data.average_fps.gpu2}
+                        </strong>
+                    </p>
+                    <p>
+                        Approximately
+                        <strong>
+                            ${data.performance_difference}% faster
+                        </strong>
+                        across all tested games.
+                    </p>
+                </div>
+                <br>
+            `;
 
-    <table class="compare-table">
+            html += `
+                <h3>🎮 Game Benchmarks</h3>
+            `;
 
-        <tr>
-            <th>Specification</th>
-            <th>${data.gpu1.name}</th>
-            <th>${data.gpu2.name}</th>
-            <th>Winner</th>
-        </tr>
+            if (!data.benchmarks || Object.keys(data.benchmarks).length === 0) {
+                html += "<p>No benchmark data available for these GPUs.</p>";
+            } else {
+                html += `
+                    <table class="compare-table">
+                        <tr>
+                            <th>Resolution</th>
+                            <th>${data.gpu1.name}</th>
+                            <th>${data.gpu2.name}</th>
+                            <th>Winner</th>
+                        </tr>
+                `;
 
-        <tr>
-            <td>Price</td>
-            <td>₹${data.gpu1.price}</td>
-            <td>₹${data.gpu2.price}</td>
-            <td>🏆 ${data.winner.price}</td>
-        </tr>
+                Object.entries(data.benchmarks).forEach(([game, results]) => {
+                    html += `
+                        <tr>
+                            <th colspan="4" class="game-header">
+                                🎮 ${game}
+                            </th>
+                        </tr>
+                    `;
 
-        <tr>
-            <td>Gaming Score</td>
-            <td>${data.gpu1.gaming_score}</td>
-            <td>${data.gpu2.gaming_score}</td>
-            <td>🏆 ${data.winner.gaming_score}</td>
-        </tr>
+                    results.forEach((bench) => {
+                        const maxFPS = Math.max(bench.gpu1_fps, bench.gpu2_fps, 1);
+                        const gpu1Width = (bench.gpu1_fps / maxFPS) * 100;
+                        const gpu2Width = (bench.gpu2_fps / maxFPS) * 100;
 
-        <tr>
-            <td>Power Draw</td>
-            <td>${data.gpu1.power_draw} W</td>
-            <td>${data.gpu2.power_draw} W</td>
-            <td>🏆 ${data.winner.power_draw}</td>
-        </tr>
+                        html += `
+                            <tr>
+                                <td>${bench.resolution}</td>
+                                <td>
+                                    <div class="fps-bar">
+                                        <div class="fps-fill" style="width:${gpu1Width}%"></div>
+                                        <span>${bench.gpu1_fps} FPS</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="fps-bar">
+                                        <div class="fps-fill" style="width:${gpu2Width}%"></div>
+                                        <span>${bench.gpu2_fps} FPS</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    ${bench.gpu1_fps > bench.gpu2_fps ? "🏆 GPU 1" : "🏆 GPU 2"}
+                                </td>
+                            </tr>
+                        `;
+                    });
+                });
 
-    </table>
+                html += "</table>";
+            }
 
-    <br>
+            comparisonResult.innerHTML = html;
+        } catch (error) {
+            comparisonResult.innerHTML =
+                "<p>Unable to compare GPUs right now.</p>";
+        }
+    });
+    const compareCpuButton = document.getElementById("compare-cpu-btn");
+const cpuComparisonResult = document.getElementById("cpu-comparison-result");
 
-    <h3>🎮 Game Benchmarks</h3>
+if (compareCpuButton && cpuComparisonResult) {
 
-    <table class="compare-table">
+    compareCpuButton.addEventListener("click", async () => {
 
-        <tr>
+        const cpu1Id = document.getElementById("cpu1").value;
+        const cpu2Id = document.getElementById("cpu2").value;
 
-            <th>Game</th>
-            <th>Resolution</th>
-            <th>${data.gpu1.name}</th>
-            <th>${data.gpu2.name}</th>
-            <th>Winner</th>
+        if (!cpu1Id || !cpu2Id || cpu1Id === cpu2Id) {
+            cpuComparisonResult.innerHTML =
+                "<p>Please choose two different CPUs.</p>";
+            return;
+        }
 
-        </tr>
+        try {
 
-    `;
+            const response = await fetch(
+                `{% url 'compare_cpus' %}?cpu1=${cpu1Id}&cpu2=${cpu2Id}`
+            );
 
-    data.benchmarks.forEach(bench => {
+            if (!response.ok) {
+                throw new Error("Request failed");
+            }
 
-        html += `
+            const data = await response.json();
 
-        <tr>
+            cpuComparisonResult.innerHTML = `
+                <table class="compare-table">
 
-            <td>${bench.game}</td>
+                    <tr>
+                        <th>Specification</th>
+                        <th>${data.cpu1.name}</th>
+                        <th>${data.cpu2.name}</th>
+                        <th>Winner</th>
+                    </tr>
 
-            <td>${bench.resolution}</td>
+                    <tr>
+                        <td>Price</td>
+                        <td>₹${data.cpu1.price}</td>
+                        <td>₹${data.cpu2.price}</td>
+                        <td>🏆 ${data.winner.price}</td>
+                    </tr>
 
-            <td>${bench.gpu1_fps} FPS</td>
+                    <tr>
+                        <td>Gaming Score</td>
+                        <td>${data.cpu1.gaming_score}</td>
+                        <td>${data.cpu2.gaming_score}</td>
+                        <td>🏆 ${data.winner.gaming_score}</td>
+                    </tr>
 
-            <td>${bench.gpu2_fps} FPS</td>
+                    <tr>
+                        <td>Productivity Score</td>
+                        <td>${data.cpu1.productivity_score}</td>
+                        <td>${data.cpu2.productivity_score}</td>
+                        <td>🏆 ${data.winner.productivity_score}</td>
+                    </tr>
 
-            <td>🏆 ${bench.winner}</td>
+                    <tr>
+                        <td>Power Draw</td>
+                        <td>${data.cpu1.power_draw} W</td>
+                        <td>${data.cpu2.power_draw} W</td>
+                        <td>🏆 ${data.winner.power_draw}</td>
+                    </tr>
 
-        </tr>
+                    <tr>
+                        <td>Release Year</td>
+                        <td>${data.cpu1.release_year}</td>
+                        <td>${data.cpu2.release_year}</td>
+                        <td>🏆 ${data.winner.release_year}</td>
+                    </tr>
 
-        `;
+                </table>
+            `;
+
+        } catch (error) {
+
+            cpuComparisonResult.innerHTML =
+                "<p>Unable to compare CPUs.</p>";
+
+            console.error(error);
+
+        }
 
     });
 
-    html += "</table>";
+}
+}
 
-    comparisonResult.innerHTML = html;
-
-});
 </script>
 
 {% endblock %}

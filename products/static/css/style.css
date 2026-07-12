@@ -1604,3 +1604,88 @@ strong {
     font-weight:bold;
 
 }
+.fps-bar{
+
+    position:relative;
+    background:#20252f;
+    height:26px;
+    border-radius:6px;
+    overflow:hidden;
+}
+
+.fps-fill{
+
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+
+    background:linear-gradient(90deg,#28c76f,#00cfe8);
+
+    border-radius:6px;
+}
+
+.fps-bar span{
+
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    height:26px;
+
+    font-weight:bold;
+    color:white;
+}
+
+.game-header{
+
+    background:#2b3140;
+
+    font-size:18px;
+
+    text-align:left;
+
+    padding:12px;
+}
+.overall-summary{
+
+    background:#1f2430;
+
+    border:1px solid #343d4d;
+
+    border-radius:12px;
+
+    padding:25px;
+
+    margin:25px 0;
+
+    text-align:center;
+
+}
+
+.overall-summary h2{
+
+    margin-bottom:10px;
+
+}
+
+.overall-summary h3{
+
+    color:#00cfe8;
+
+    font-size:28px;
+
+    margin-bottom:10px;
+
+}
+
+.overall-summary p{
+
+    font-size:17px;
+
+    margin:8px 0;
+
+}

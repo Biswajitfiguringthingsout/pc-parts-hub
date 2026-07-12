@@ -30,4 +30,9 @@ urlpatterns = [
         views.compare_gpus,
         name="compare_gpus",
     ),
+    path(
+        "compare-cpus/",
+        views.compare_cpus,
+        name="compare_cpus",
+    ),
 ]
