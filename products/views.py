@@ -196,7 +196,7 @@ def build_page(request):
     )
 
     gpus = Product.objects.filter(category="gpu")
-
+    builds = Build.objects.all()
     return render(
         request,
         "products/build_page.html",
@@ -216,6 +216,7 @@ def build_page(request):
             "benchmarks": benchmarks,
             "gpus": gpus,
             "cpus": cpus,
+            "builds": builds,
         },
     )
 
@@ -367,22 +368,35 @@ def compare_cpus(request):
     cpu2 = Product.objects.get(id=cpu2_id)
 
     winner = {
+    "price": (
+        cpu1.name if cpu1.price < cpu2.price
+        else cpu2.name if cpu2.price < cpu1.price
+        else "Tie"
+    ),
 
-        "price":
-            cpu1.name if cpu1.price < cpu2.price else cpu2.name,
+    "gaming_score": (
+        cpu1.name if cpu1.gaming_score > cpu2.gaming_score
+        else cpu2.name if cpu2.gaming_score > cpu1.gaming_score
+        else "Tie"
+    ),
 
-        "gaming_score":
-            cpu1.name if cpu1.gaming_score > cpu2.gaming_score else cpu2.name,
+    "productivity_score": (
+        cpu1.name if cpu1.productivity_score > cpu2.productivity_score
+        else cpu2.name if cpu2.productivity_score > cpu1.productivity_score
+        else "Tie"
+    ),
 
-        "productivity_score":
-            cpu1.name if cpu1.productivity_score > cpu2.productivity_score else cpu2.name,
+    "power_draw": (
+        cpu1.name if cpu1.power_draw < cpu2.power_draw
+        else cpu2.name if cpu2.power_draw < cpu1.power_draw
+        else "Tie"
+    ),
 
-        "power_draw":
-            cpu1.name if cpu1.power_draw < cpu2.power_draw else cpu2.name,
-
-        "release_year":
-            cpu1.name if cpu1.release_year > cpu2.release_year else cpu2.name,
-
+    "release_year": (
+        cpu1.name if cpu1.release_year > cpu2.release_year
+        else cpu2.name if cpu2.release_year > cpu1.release_year
+        else "Tie"
+    ),
     }
 
     return JsonResponse({
@@ -413,4 +427,19 @@ def compare_cpus(request):
 
         "winner":winner,
 
+    })
+def compare_builds(request):
+    return JsonResponse({
+        "build1": {
+            "gaming": 84,
+            "productivity": 79,
+            "power": 365,
+            "price": 92000,
+        },
+        "build2": {
+            "gaming": 91,
+            "productivity": 86,
+            "power": 420,
+            "price": 101000,
+        },
     })

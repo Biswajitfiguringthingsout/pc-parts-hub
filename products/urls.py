@@ -35,4 +35,9 @@ urlpatterns = [
         views.compare_cpus,
         name="compare_cpus",
     ),
+    path(
+        "compare-builds/",
+        views.compare_builds,
+        name="compare_builds",
+    ),
 ]
