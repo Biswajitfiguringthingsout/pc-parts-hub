@@ -4,13 +4,25 @@
 {% block content %}
 
 <div class="builder-header">
-
     <div class="header-left">
         <button id="sidebarToggle" class="menu-btn">
             ☰
         </button>
 
         <h2>{{ build.name }}</h2>
+
+        <form method="GET" style="margin-top:10px;">
+            <select name="build" onchange="this.form.submit()">
+                {% for b in builds %}
+                    <option
+                        value="{{ b.id }}"
+                        {% if b.id == build.id %}selected{% endif %}
+                    >
+                        {{ b.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
     </div>
 
     <div class="header-right">
@@ -759,49 +771,93 @@ if (compareBuildButton && buildComparisonResult) {
 
             const data = await response.json();
 
-            buildComparisonResult.innerHTML = `
+            let html = `
                 <table class="compare-table">
 
                     <tr>
                         <th>Metric</th>
-                        <th>Build A</th>
-                        <th>Build B</th>
+                        <th>${data.build1_name}</th>
+                        <th>${data.build2_name}</th>
+                        <th>Winner</th>
                     </tr>
 
                     <tr>
                         <td>Gaming Score</td>
-                        <td>${data.build1.gaming}</td>
-                        <td>${data.build2.gaming}</td>
+
+                        <td>
+                            <div class="fps-bar">
+                                <div class="fps-fill"
+                                     style="width:${data.build1.gaming}%"></div>
+                                <span>${data.build1.gaming}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="fps-bar">
+                                <div class="fps-fill"
+                                     style="width:${data.build2.gaming}%"></div>
+                                <span>${data.build2.gaming}</span>
+                            </div>
+                        </td>
+
+                        <td>🏆 ${data.winner.gaming}</td>
                     </tr>
 
                     <tr>
                         <td>Productivity</td>
-                        <td>${data.build1.productivity}</td>
-                        <td>${data.build2.productivity}</td>
+
+                        <td>
+                            <div class="fps-bar">
+                                <div class="fps-fill"
+                                     style="width:${data.build1.productivity}%"></div>
+                                <span>${data.build1.productivity}</span>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="fps-bar">
+                                <div class="fps-fill"
+                                     style="width:${data.build2.productivity}%"></div>
+                                <span>${data.build2.productivity}</span>
+                            </div>
+                        </td>
+
+                        <td>🏆 ${data.winner.productivity}</td>
                     </tr>
 
                     <tr>
                         <td>Power Draw</td>
                         <td>${data.build1.power} W</td>
                         <td>${data.build2.power} W</td>
+                        <td>🏆 ${data.winner.power}</td>
                     </tr>
 
                     <tr>
                         <td>Total Price</td>
                         <td>₹${data.build1.price}</td>
                         <td>₹${data.build2.price}</td>
+                        <td>🏆 ${data.winner.price}</td>
                     </tr>
 
                 </table>
+
+                <br>
+
+                <div class="overall-summary">
+                    <h2>🏆 Overall Winner</h2>
+                    <h3>${data.overall}</h3>
+                </div>
             `;
+
+            buildComparisonResult.innerHTML = html;
 
         }
         catch (error) {
 
+            console.error(error);
+
             buildComparisonResult.innerHTML =
                 "<p>Unable to compare builds.</p>";
-
-            console.error(error);
 
         }
 

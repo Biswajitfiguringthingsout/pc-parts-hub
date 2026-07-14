@@ -3,7 +3,8 @@ from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.db.models import Sum
 from django.http import JsonResponse
-
+from django.shortcuts import redirect
+from django.urls import reverse
 from .models import Product, Brand, Build, BuildItem, Benchmark
 from .ai import analyze_build
 from .performance import estimate_performance
@@ -130,7 +131,14 @@ def home(request):
 
 def build_page(request):
 
-    build = Build.objects.first()
+    builds = Build.objects.all()
+
+    build_id = request.GET.get("build")
+
+    if build_id:
+        build = get_object_or_404(Build, id=build_id)
+    else:
+        build = builds.first()
 
     items = BuildItem.objects.filter(build=build)
     cpus = Product.objects.filter(category="cpu")
@@ -223,7 +231,12 @@ def build_page(request):
 
 def add_to_build(request, product_id):
 
-    build = Build.objects.first()
+    build_id = request.GET.get("build")
+
+    if build_id:
+        build = get_object_or_404(Build, id=build_id)
+    else:
+        build = Build.objects.first()
 
     product = get_object_or_404(
         Product,
@@ -254,19 +267,18 @@ def add_to_build(request, product_id):
         product=product
     )
 
-    return redirect('build_page')
+    return redirect(f"/products/build/?build={build.id}")
 
 
 def remove_build_item(request, item_id):
+    item = get_object_or_404(BuildItem, id=item_id)
 
-    item = get_object_or_404(
-        BuildItem,
-        id=item_id
-    )
+    build_id = item.build.id
 
     item.delete()
 
-    return redirect('build_page')
+    return redirect(f"{reverse('build_page')}?build={build_id}")
+
 def compare_gpus(request):
 
     gpu1_id = request.GET.get("gpu1")
@@ -429,17 +441,107 @@ def compare_cpus(request):
 
     })
 def compare_builds(request):
+
+    build1 = get_object_or_404(Build, id=request.GET.get("build1"))
+    build2 = get_object_or_404(Build, id=request.GET.get("build2"))
+
+    stats1 = calculate_build_stats(build1)
+    stats2 = calculate_build_stats(build2)
+
+    
+
+    build1_points = 0
+    build2_points = 0
+
+    if stats1["gaming"] > stats2["gaming"]:
+        build1_points += 1
+    else:
+        build2_points += 1
+
+    if stats1["productivity"] > stats2["productivity"]:
+        build1_points += 1
+    else:
+        build2_points += 1
+
+    if stats1["power"] < stats2["power"]:
+        build1_points += 1
+    else:
+        build2_points += 1
+
+    if stats1["price"] < stats2["price"]:
+        build1_points += 1
+    else:
+        build2_points += 1
+
+    overall = "Build A" if build1_points >= build2_points else "Build B"
+    winner = {
+    "gaming": build1.name if stats1["gaming"] > stats2["gaming"] else build2.name,
+    "productivity": build1.name if stats1["productivity"] > stats2["productivity"] else build2.name,
+    "power": build1.name if stats1["power"] < stats2["power"] else build2.name,
+    "price": build1.name if stats1["price"] < stats2["price"] else build2.name,
+}
+
+    overall = build1.name if build1_points >= build2_points else build2.name
     return JsonResponse({
-        "build1": {
-            "gaming": 84,
-            "productivity": 79,
-            "power": 365,
-            "price": 92000,
-        },
-        "build2": {
-            "gaming": 91,
-            "productivity": 86,
-            "power": 420,
-            "price": 101000,
-        },
+        "build1_name": build1.name,
+        "build2_name": build2.name,
+        "build1": stats1,
+        "build2": stats2,
+        "winner": winner,
+        "overall": overall,
     })
+    
+def calculate_build_stats(build):
+    items = BuildItem.objects.filter(build=build)
+
+    stats = {
+        "gaming": 0,
+        "productivity": 0,
+        "power": 0,
+        "price": 0,
+    }
+
+    cpu = None
+    gpu = None
+    ram = None
+    storage = None
+
+    for item in items:
+        product = item.product
+
+        stats["power"] += product.power_draw or 0
+        stats["price"] += float(product.price)
+
+        if product.category == "cpu":
+            cpu = product
+
+        elif product.category == "gpu":
+            gpu = product
+
+        elif product.category == "ram":
+            ram = product
+
+        elif product.category == "storage":
+            storage = product
+
+    gaming = 0
+    productivity = 0
+
+    if cpu:
+        gaming += cpu.gaming_score * 0.35
+        productivity += cpu.productivity_score * 0.60
+
+    if gpu:
+        gaming += gpu.gaming_score * 0.55
+
+    if ram:
+        gaming += ram.gaming_score * 0.10
+        productivity += ram.productivity_score * 0.20
+
+    if storage:
+        productivity += storage.productivity_score * 0.20
+
+    stats["gaming"] = round(gaming)
+    stats["productivity"] = round(productivity)
+
+    return stats
