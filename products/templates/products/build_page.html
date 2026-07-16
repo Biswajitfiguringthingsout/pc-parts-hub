@@ -62,7 +62,7 @@
                         </p>
 
                         <a
-                            href="{% url 'remove_build_item' item.id %}"
+                            href="{% url 'remove_build_item' item.id %}?build={{ build.id }}"
                             class="remove-btn"
                         >
                             Remove
@@ -150,7 +150,7 @@
                                 {% endif %}
                             </div>
                             <a
-                                href="{% url 'add_to_build' rec.product.id %}"
+                                href="{% url 'add_to_build' rec.product.id %}?build={{ build.id }}"
                                 class="build-btn"
                             >
                                 Add To Build

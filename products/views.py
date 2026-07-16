@@ -232,6 +232,7 @@ def build_page(request):
 def add_to_build(request, product_id):
 
     build_id = request.GET.get("build")
+    build = get_object_or_404(Build, id=build_id)
 
     if build_id:
         build = get_object_or_404(Build, id=build_id)
@@ -271,13 +272,13 @@ def add_to_build(request, product_id):
 
 
 def remove_build_item(request, item_id):
+
+    build_id = request.GET.get("build")
+
     item = get_object_or_404(BuildItem, id=item_id)
-
-    build_id = item.build.id
-
     item.delete()
 
-    return redirect(f"{reverse('build_page')}?build={build_id}")
+    return redirect(f"/products/build/?build={build_id}")
 
 def compare_gpus(request):
 
