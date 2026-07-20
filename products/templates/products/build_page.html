@@ -4,15 +4,47 @@
 {% block content %}
 
 <div class="build-manager">
+
+    <div class="build-header">
+
+        <h2>
+            My Builds
+                <span class="build-count">
+                    {{ builds|length }}
+                </span>
+        </h2>
+
+        <a
+            href="{% url 'create_build' %}"
+            class="new-build-btn"
+        >
+            + Create Build
+        </a>
+
+    </div>
+
     <div class="build-list">
+
         {% for b in builds %}
-            <div class="build-item">
-                <a
-                    href="{% url 'build_page' %}?build={{ b.id }}"
-                    class="build-pill {% if b.id == build.id %}active-build{% endif %}"
-                >
+
+        <div class="build-row {% if b.id == build.id %}active-build{% endif %}">
+
+            <a
+                href="{% url 'build_page' %}?build={{ b.id }}"
+                class="build-link"
+            >
+
+                <span class="build-status {% if b.id == build.id %}online{% endif %}"></span>
+
+                <span class="build-name">
+
                     {{ b.name }}
-                </a>
+
+                </span>
+
+            </a>
+
+            <div class="build-actions">
 
                 <button
                     class="icon-btn"
@@ -24,20 +56,19 @@
                 <a
                     href="{% url 'delete_build' b.id %}"
                     class="icon-btn delete-btn"
-                    onclick="return confirm('Delete {{ b.name }}?')"
+                    onclick="return confirm('Delete this build?')"
                 >
                     🗑
                 </a>
+
             </div>
+
+        </div>
+
         {% endfor %}
 
-        <a
-            href="{% url 'create_build' %}"
-            class="new-build-btn"
-        >
-            + New Build
-        </a>
     </div>
+
 </div>
 
 <div class="builder-header">
@@ -393,10 +424,10 @@
             </div>
             <section class="compare-panel">
 
-                <h2>⚔ Compare Components</h2>
+                
 
                 <div class="compare-controls">
-
+                    
                     <!-- We'll add dropdowns here -->
 
                 </div>
@@ -404,7 +435,7 @@
             </section>
         </section>
         <section class="tab-panel" id="compare">
-
+            <h2>⚔ Compare Components</h2>
             <div class="compatibility-panel">
 
                 <h2>🖥 Compare Builds</h2>

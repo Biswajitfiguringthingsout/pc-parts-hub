@@ -2626,3 +2626,233 @@ text-decoration:none;
 background:#e53935;
 
 }
+/* ===============================
+   BUILD MANAGER
+================================ */
+
+.build-manager{
+
+    background:var(--card-bg);
+
+    border:1px solid var(--border-color);
+
+    border-radius:18px;
+
+    padding:22px;
+
+    margin-bottom:30px;
+
+}
+
+.build-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:20px;
+
+}
+
+.build-header h2{
+
+    font-size:24px;
+
+    font-weight:700;
+
+}
+
+.build-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+.build-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:14px 18px;
+
+    border-radius:14px;
+
+    background:var(--surface);
+
+    transition:.25s;
+
+}
+
+.build-row:hover{
+
+    transform:translateX(6px);
+
+}
+
+.active-build{
+
+    border-left:5px solid #00d26a;
+
+    background:rgba(0,210,106,.12);
+
+}
+
+.build-link{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:16px;
+
+    text-decoration:none;
+
+    color:inherit;
+
+    flex:1;
+
+}
+
+.build-name{
+
+    font-size:17px;
+
+    font-weight:600;
+
+}
+
+.build-actions{
+
+    display:flex;
+
+    gap:16px;
+
+}
+
+.icon-btn{
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:17px;
+
+    background:#2f3640;
+
+    transition:.25s;
+
+}
+
+.icon-btn:hover{
+
+    transform:scale(1.08);
+
+}
+
+.delete-btn{
+
+    background:#b71c1c;
+
+}
+
+
+
+.new-build-btn{
+
+    padding:10px 18px;
+
+    border-radius:12px;
+
+    background:#4f46e5;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.new-build-btn:hover{
+
+    transform:translateY(-2px);
+
+}
+.build-status{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#666;
+    display:inline-block;
+}
+
+.build-status.online{
+    background:#22c55e;
+    box-shadow:0 0 10px #22c55e;
+}
+.build-row{
+
+    cursor:pointer;
+
+}
+.icon-btn{
+
+    width:40px;
+
+    height:40px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    border-radius:10px;
+
+    background:var(--card-bg);
+
+    border:1px solid var(--border-color);
+
+    color:var(--text-color);
+
+}
+
+.icon-btn:hover{
+
+    background:#4f46e5;
+
+    color:white;
+
+}
+.build-count{
+
+    margin-left:10px;
+
+    background:#4f46e5;
+
+    color:white;
+
+    border-radius:999px;
+
+    padding:3px 10px;
+
+    font-size:13px;
+
+}

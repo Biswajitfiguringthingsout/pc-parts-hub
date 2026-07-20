@@ -2,73 +2,238 @@
 
 {% block content %}
 
-<div class="hero">
+<!-- ================= HERO ================= -->
 
-    <h2>Build Your Dream PC</h2>
+<section class="hero-section">
 
-    <p>
-        Explore high-performance CPUs, GPUs, RAM, motherboards,
-        and more to create the perfect setup.
-    </p>
+    <div class="hero-left">
 
-    <a href="/products/" class="browse-btn">
-        Browse Components
-    </a>
+        <span class="hero-badge">
+            AI Powered PC Builder
+        </span>
 
-</div>
+        <h1>
 
-<h2>Featured Categories</h2>
+            Build Your
+            <br>
+            Dream PC
 
-<div class="category-grid">
+        </h1>
 
-    <a href="/products/category/cpu/" class="category-card">
-        <h3>CPU</h3>
-    </a>
+        <p>
 
-    <a href="/products/category/gpu/" class="category-card">
-        <h3>GPU</h3>
-    </a>
+            Design, compare and optimize your perfect computer
+            with AI recommendations, compatibility checking
+            and real gaming performance estimates.
 
-    <a href="/products/category/ram/" class="category-card">
-        <h3>RAM</h3>
-    </a>
+        </p>
 
-    <a href="/products/category/motherboard/" class="category-card">
-        <h3>Motherboard</h3>
-    </a>
+        <div class="hero-buttons">
 
-</div>
+            <a href="{% url 'build_page' %}" class="primary-btn">
+                Start Building
+            </a>
 
-<h2>Featured Products</h2>
-
-<div class="product-grid">
-
-    {% for product in featured_products %}
-
-    <a href="/products/{{ product.id }}/" class="product-link">
-
-        <div class="product-card">
-
-            {% if product.image %}
-                <div class="image-container">
-                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
-                </div>
-            {% endif %}
-
-            <h3>{{ product.name }}</h3>
-
-            <p>{{ product.brand }}</p>
-
-            <p class="price">
-                ₹{{ product.price }}
-            </p>
+            <a href="/products/" class="secondary-btn">
+                Browse Components
+            </a>
 
         </div>
 
+    </div>
+
+    <div class="hero-right">
+
+        <!-- Replace later with 3D viewer -->
+
+        <img
+            src="/static/images/pc-case.png"
+            class="hero-image"
+        >
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features-section">
+
+    <div class="feature-card">
+
+        <h3>🤖 AI Recommendations</h3>
+
+        <p>
+
+            Let AI recommend the best parts
+            for your budget.
+
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <h3>🛡 Compatibility</h3>
+
+        <p>
+
+            Instantly detect incompatible
+            components.
+
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <h3>🎮 FPS Estimator</h3>
+
+        <p>
+
+            Estimate game performance before
+            buying.
+
+        </p>
+
+    </div>
+
+    <div class="feature-card">
+
+        <h3>📊 Compare Builds</h3>
+
+        <p>
+
+            Compare complete PC builds side
+            by side.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= PRESET BUILDS ================= -->
+
+<section class="preset-section">
+
+    <h2>Featured Builds</h2>
+
+    <div class="preset-grid">
+
+        <div class="preset-card">
+
+            <h3>Budget Gaming</h3>
+
+            <p>1080p Performance</p>
+
+        </div>
+
+        <div class="preset-card">
+
+            <h3>Mid Range</h3>
+
+            <p>1440p Gaming</p>
+
+        </div>
+
+        <div class="preset-card">
+
+            <h3>High End</h3>
+
+            <p>4K Ultra</p>
+
+        </div>
+
+        <div class="preset-card">
+
+            <h3>Creator</h3>
+
+            <p>Rendering & Editing</p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= PRODUCTS ================= -->
+
+<section class="featured-products">
+
+    <h2>Latest Components</h2>
+
+    <div class="product-grid">
+
+        {% for product in featured_products %}
+
+        <a href="/products/{{ product.id }}/" class="product-link">
+
+            <div class="product-card">
+
+                {% if product.image %}
+
+                <div class="image-container">
+
+                    <img
+                        src="{{ product.image.url }}"
+                        class="product-image"
+                    >
+
+                </div>
+
+                {% endif %}
+
+                <h3>{{ product.name }}</h3>
+
+                <p>{{ product.brand }}</p>
+
+                <p class="price">
+
+                    ₹{{ product.price }}
+
+                </p>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+
+<!-- ================= CTA ================= -->
+
+<section class="cta-section">
+
+    <h2>
+
+        Ready to build your next PC?
+
+    </h2>
+
+    <p>
+
+        Start building today with AI-powered recommendations.
+
+    </p>
+
+    <a href="{% url 'build_page' %}" class="primary-btn">
+
+        Build Now
+
     </a>
 
-    {% endfor %}
-
-</div>
+</section>
 
 {% endblock %}

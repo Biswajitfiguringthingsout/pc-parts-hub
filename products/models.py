@@ -212,14 +212,43 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+BUILD_TYPES = [
+    ("gaming", "Gaming"),
+    ("streaming", "Streaming"),
+    ("workstation", "Workstation"),
+    ("editing", "Editing"),
+    ("office", "Office"),
+    ("ai", "AI / Machine Learning"),
+    ("mini_itx", "Mini ITX"),
+    ("server", "Server / NAS"),
+    ("custom", "Custom"),
+]
 class Build(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
         related_name="builds",
         null=True,
         blank=True,
     )
 
     name = models.CharField(max_length=100)
+
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+    )
+
+    build_type = models.CharField(
+        max_length=20,
+        choices=BUILD_TYPES,
+        default="gaming",
+    )
+
+    updated_at = models.DateTimeField(
+        auto_now=True,
+    )
 
     def __str__(self):
         return self.name
