@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -9,21 +10,22 @@
     <div class="hero-left">
 
         <span class="hero-badge">
-            AI Powered PC Builder
+            PC Parts Hub • AI Powered
         </span>
 
         <h1>
 
-            Build Your
+            Build Better.
             <br>
-            Dream PC
+            Build Smarter.
 
         </h1>
 
         <p>
 
-            Design, compare and optimize your perfect computer
-            with AI recommendations, compatibility checking
+            The next-generation platform for designing,
+            comparing and optimizing custom PCs with
+            AI recommendations, compatibility checking
             and real gaming performance estimates.
 
         </p>
@@ -40,82 +42,157 @@
 
         </div>
 
+        <div class="hero-stats">
+
+            <div class="stat-card">
+                <h3>500+</h3>
+                <p>Components</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>AI</h3>
+                <p>Recommendations</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>100%</h3>
+                <p>Compatibility</p>
+            </div>
+
+        </div>
+
     </div>
 
     <div class="hero-right">
 
-        <!-- Replace later with 3D viewer -->
+        <div class="hero-preview">
 
-        <img
-            src="/static/images/pc-case.png"
-            class="hero-image"
-        >
+            <img
+                src="{% static 'images/pc-case.png' %}"
+                alt="PC Parts Hub"
+                class="hero-image"
+            >
+
+        </div>
 
     </div>
 
 </section>
 
+<!-- ================= WHY US ================= -->
 
+<section class="why-section">
+
+    <h2>Why PC Parts Hub?</h2>
+
+    <p class="section-subtitle">
+
+        Everything you need to plan, build and optimize
+        your perfect PC in one place.
+
+    </p>
+
+    <div class="why-grid">
+
+        <div class="why-card">
+            <h3>AI Powered</h3>
+            <p>
+                Intelligent recommendations based on your
+                budget and usage.
+            </p>
+        </div>
+
+        <div class="why-card">
+            <h3>Compatibility Engine</h3>
+            <p>
+                Instantly detect incompatible components
+                before buying.
+            </p>
+        </div>
+
+        <div class="why-card">
+            <h3>Performance Prediction</h3>
+            <p>
+                Estimate gaming FPS and workstation
+                performance.
+            </p>
+        </div>
+
+        <div class="why-card">
+            <h3>Multiple Builds</h3>
+            <p>
+                Save, compare and organize multiple
+                custom PC builds.
+            </p>
+        </div>
+
+    </div>
+
+</section>
 
 <!-- ================= FEATURES ================= -->
 
 <section class="features-section">
 
-    <div class="feature-card">
+    <h2>Powerful Features</h2>
 
-        <h3>🤖 AI Recommendations</h3>
+    <div class="feature-grid">
 
-        <p>
+        <div class="feature-card">
 
-            Let AI recommend the best parts
-            for your budget.
+            <h3>AI Builder</h3>
 
-        </p>
+            <p>
 
-    </div>
+                Generate complete PC builds using AI
+                based on your budget and purpose.
 
-    <div class="feature-card">
+            </p>
 
-        <h3>🛡 Compatibility</h3>
+        </div>
 
-        <p>
+        <div class="feature-card">
 
-            Instantly detect incompatible
-            components.
+            <h3>Build Comparison</h3>
 
-        </p>
+            <p>
 
-    </div>
+                Compare CPUs, GPUs and complete
+                PC builds side by side.
 
-    <div class="feature-card">
+            </p>
 
-        <h3>🎮 FPS Estimator</h3>
+        </div>
 
-        <p>
+        <div class="feature-card">
 
-            Estimate game performance before
-            buying.
+            <h3>Compatibility Checker</h3>
 
-        </p>
+            <p>
 
-    </div>
+                Prevent incompatible parts with
+                intelligent validation.
 
-    <div class="feature-card">
+            </p>
 
-        <h3>📊 Compare Builds</h3>
+        </div>
 
-        <p>
+        <div class="feature-card">
 
-            Compare complete PC builds side
-            by side.
+            <h3>Performance Estimator</h3>
 
-        </p>
+            <p>
+
+                Predict gaming FPS and productivity
+                scores before purchasing.
+
+            </p>
+
+        </div>
 
     </div>
 
 </section>
-
-
 
 <!-- ================= PRESET BUILDS ================= -->
 
@@ -123,37 +200,68 @@
 
     <h2>Featured Builds</h2>
 
+    <p class="section-subtitle">
+
+        Explore professionally designed PC configurations.
+
+    </p>
+
     <div class="preset-grid">
 
         <div class="preset-card">
 
-            <h3>Budget Gaming</h3>
+            <span class="build-tag">
+                Gaming
+            </span>
 
-            <p>1080p Performance</p>
+            <h3>Budget Beast</h3>
 
-        </div>
+            <ul>
 
-        <div class="preset-card">
+                <li>Ryzen 5 9600X</li>
+                <li>RTX 5060</li>
+                <li>32GB DDR5</li>
+                <li>₹95,000</li>
 
-            <h3>Mid Range</h3>
-
-            <p>1440p Gaming</p>
-
-        </div>
-
-        <div class="preset-card">
-
-            <h3>High End</h3>
-
-            <p>4K Ultra</p>
+            </ul>
 
         </div>
 
         <div class="preset-card">
 
-            <h3>Creator</h3>
+            <span class="build-tag">
+                Gaming
+            </span>
 
-            <p>Rendering & Editing</p>
+            <h3>1440p Warrior</h3>
+
+            <ul>
+
+                <li>Ryzen 7 9800X3D</li>
+                <li>RTX 5070</li>
+                <li>32GB DDR5</li>
+                <li>₹165,000</li>
+
+            </ul>
+
+        </div>
+
+        <div class="preset-card">
+
+            <span class="build-tag">
+                Workstation
+            </span>
+
+            <h3>Creator Studio</h3>
+
+            <ul>
+
+                <li>Ryzen 9</li>
+                <li>RTX 5080</li>
+                <li>64GB DDR5</li>
+                <li>₹285,000</li>
+
+            </ul>
 
         </div>
 
@@ -161,13 +269,17 @@
 
 </section>
 
-
-
 <!-- ================= PRODUCTS ================= -->
 
 <section class="featured-products">
 
-    <h2>Latest Components</h2>
+    <h2>Featured Components</h2>
+
+    <p class="section-subtitle">
+
+        Discover the latest hardware available in our catalogue.
+
+    </p>
 
     <div class="product-grid">
 
@@ -184,6 +296,7 @@
                     <img
                         src="{{ product.image.url }}"
                         class="product-image"
+                        alt="{{ product.name }}"
                     >
 
                 </div>
@@ -195,9 +308,7 @@
                 <p>{{ product.brand }}</p>
 
                 <p class="price">
-
                     ₹{{ product.price }}
-
                 </p>
 
             </div>
@@ -210,30 +321,70 @@
 
 </section>
 
-
-
 <!-- ================= CTA ================= -->
 
 <section class="cta-section">
 
     <h2>
 
-        Ready to build your next PC?
+        Ready to Build Your Dream PC?
 
     </h2>
 
     <p>
 
-        Start building today with AI-powered recommendations.
+        Start designing your next build with AI-powered
+        recommendations, compatibility analysis and
+        real-world performance estimates.
 
     </p>
 
-    <a href="{% url 'build_page' %}" class="primary-btn">
+    <div class="hero-buttons">
 
-        Build Now
+        <a href="{% url 'build_page' %}" class="primary-btn">
 
-    </a>
+            Build Now
+
+        </a>
+
+        <a href="/products/" class="secondary-btn">
+
+            Explore Components
+
+        </a>
+
+    </div>
 
 </section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="landing-footer">
+
+    <h2>PC Parts Hub</h2>
+
+    <p>
+
+        Build • Compare • Optimize
+
+    </p>
+
+    <div class="footer-links">
+
+        <a href="/">Home</a>
+
+        <a href="/products/">Products</a>
+
+        <a href="{% url 'build_page' %}">Builder</a>
+
+    </div>
+
+    <p class="copyright">
+
+        © 2026 PC Parts Hub
+
+    </p>
+
+</footer>
 
 {% endblock %}

@@ -50,7 +50,7 @@
                     class="icon-btn"
                     onclick="renameBuild('{{ b.id }}','{{ b.name }}')"
                 >
-                    ✏
+                    <span class="emoji-icon">✏</span>
                 </button>
 
                 <a
@@ -58,7 +58,7 @@
                     class="icon-btn delete-btn"
                     onclick="return confirm('Delete this build?')"
                 >
-                    🗑
+                    <span class="emoji-icon">🗑</span>
                 </a>
 
             </div>
@@ -79,7 +79,7 @@
 
         <h2>{{ build.name }}</h2>
 
-        <form method="GET" style="margin-top:10px;">
+        <form method="GET">
             <select name="build" onchange="this.form.submit()">
                 {% for b in builds %}
                     <option
@@ -157,7 +157,7 @@
         {% if next_category %}
             <div class="builder-guide">
                 <div class="guide-icon">
-                    🤖
+                    <span class="emoji-icon">🤖</span>
                 </div>
 
                 <div class="guide-text">
@@ -304,13 +304,15 @@
                         {{ build_analysis.rating }}
                     </div>
                 </div>
-                <div style="font-size:55px;">🤖</div>
+                <div class="ai-badge-icon">
+                    <span class="emoji-icon emoji-icon-lg">🤖</span>
+                </div>
             </div>
 
             <div class="ai-summary">{{ build_analysis.summary }}</div>
 
             <div class="ai-section">
-                <h3>💪 Strengths</h3>
+                <h3><span class="emoji-icon">💪</span> Strengths</h3>
                 <ul class="ai-list ai-strength">
                     {% for strength in build_analysis.strengths %}
                         <li>{{ strength }}</li>
@@ -321,7 +323,7 @@
             </div>
 
             <div class="ai-section">
-                <h3>⚠ Warnings</h3>
+                <h3><span class="emoji-icon">⚠</span> Warnings</h3>
                 <ul class="ai-list ai-warning">
                     {% for warning in build_analysis.warnings %}
                         <li>{{ warning }}</li>
@@ -332,7 +334,7 @@
             </div>
 
             <div class="ai-section">
-                <h3>🚀 Suggestions</h3>
+                <h3><span class="emoji-icon">🚀</span> Suggestions</h3>
                 <ul class="ai-list ai-suggestion">
                     {% for suggestion in build_analysis.suggestions %}
                         <li>{{ suggestion }}</li>
@@ -354,7 +356,7 @@
         </section>
 
         <section class="tab-panel active-panel" id="benchmarks">
-            <h2>🎮 Estimated Gaming Performance</h2>
+            <h2><span class="emoji-icon">🎮</span> Estimated Gaming Performance</h2>
             <div class="dashboard-grid">
                 <div class="dashboard-card">
                     <h3>1080p Ultra</h3>
@@ -369,11 +371,9 @@
                     <h2>{{ performance.fps_4k }} FPS</h2>
                 </div>
             </div>
-            
-            <br>
 
             <div class="compatibility-panel">
-                <h2>⚙ Performance Analysis</h2>
+                <h2><span class="emoji-icon">⚙</span> Performance Analysis</h2>
                 <p>{{ performance.summary }}</p>
 
                 {% if performance.cpu_bottleneck %}
@@ -398,7 +398,7 @@
             </div>
 
             <div class="compatibility-panel">
-                <h2>🎮 Game Benchmarks</h2>
+                <h2><span class="emoji-icon">🎮</span> Game Benchmarks</h2>
 
                 {% if benchmarks %}
                     {% for game, results in benchmarks.items %}
@@ -422,23 +422,12 @@
                     <p>No benchmark data available.</p>
                 {% endif %}
             </div>
-            <section class="compare-panel">
-
-                
-
-                <div class="compare-controls">
-                    
-                    <!-- We'll add dropdowns here -->
-
-                </div>
-
-            </section>
         </section>
         <section class="tab-panel" id="compare">
-            <h2>⚔ Compare Components</h2>
+            <h2><span class="emoji-icon">⚔</span> Compare Components</h2>
             <div class="compatibility-panel">
 
-                <h2>🖥 Compare Builds</h2>
+                <h2><span class="emoji-icon">🖥</span> Compare Builds</h2>
 
                 <div class="compare-form">
 
@@ -489,7 +478,7 @@
             </div>
 
             <div class="compatibility-panel">
-                <h2>⚔ GPU Comparison</h2>
+                <h2><span class="emoji-icon">⚔</span> GPU Comparison</h2>
 
                 <div class="compare-form">
                     <div class="compare-select">
@@ -525,7 +514,7 @@
             </div>
 
             <div class="compatibility-panel">
-                <h2>🧠 CPU Comparison</h2>
+                <h2><span class="emoji-icon">🧠</span> CPU Comparison</h2>
 
                 <div class="compare-form">
                     <div class="compare-select">
@@ -564,7 +553,7 @@
 <section class="tab-panel" id="thermals">
 
     <div class="compatibility-panel">
-        <h2>🌡 Thermals</h2>
+        <h2><span class="emoji-icon">🌡</span> Thermals</h2>
 
         <p>Thermals coming soon...</p>
     </div>
@@ -574,7 +563,7 @@
 <section class="tab-panel" id="price">
 
     <div class="compatibility-panel">
-        <h2>💰 Price History</h2>
+        <h2><span class="emoji-icon">💰</span> Price History</h2>
 
         <p>Price history coming soon...</p>
     </div>
@@ -584,7 +573,7 @@
 <section class="tab-panel" id="ai">
 
     <div class="compatibility-panel">
-        <h2>🤖 AI Advisor</h2>
+        <h2><span class="emoji-icon">🤖</span> AI Advisor</h2>
 
         <p>AI comparison coming soon...</p>
     </div>
