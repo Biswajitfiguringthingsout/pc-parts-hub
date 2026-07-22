@@ -9,6 +9,7 @@ from .models import Product, Brand, Build, BuildItem, Benchmark
 from .ai import analyze_build
 from .performance import estimate_performance
 from .compatibility import check_compatibility
+from django.contrib.auth.decorators import login_required
 from .recommendation_engine import (
     get_installed_components,
     get_next_category,
@@ -128,7 +129,7 @@ def home(request):
         },
     )
 
-
+@login_required(login_url='login')
 def build_page(request):
 
     builds = Build.objects.all()
@@ -228,7 +229,7 @@ def build_page(request):
         },
     )
 
-
+@login_required(login_url='login')
 def add_to_build(request, product_id):
 
     build_id = request.GET.get("build")
@@ -270,7 +271,7 @@ def add_to_build(request, product_id):
 
     return redirect(f"/products/build/?build={build.id}")
 
-
+@login_required(login_url='login')
 def remove_build_item(request, item_id):
 
     build_id = request.GET.get("build")
@@ -279,7 +280,7 @@ def remove_build_item(request, item_id):
     item.delete()
 
     return redirect(f"/products/build/?build={build_id}")
-
+@login_required(login_url='login')
 def compare_gpus(request):
 
     gpu1_id = request.GET.get("gpu1")

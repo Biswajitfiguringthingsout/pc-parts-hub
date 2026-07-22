@@ -23,6 +23,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('products/', include('products.urls')),
+    path("admin/", admin.site.urls),
+    path("", include("products.urls")),
+
+    # Add this
+    path("accounts/", include("django.contrib.auth.urls")),
     
 ]
 if settings.DEBUG:
