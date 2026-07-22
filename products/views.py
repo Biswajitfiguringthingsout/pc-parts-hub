@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
 from django.shortcuts import redirect
 from django.db.models import Sum
-from django.http import JsonResponse
+from django.http import JsonResponse, request
 from django.shortcuts import redirect
 from django.urls import reverse
 from .models import Product, Brand, Build, BuildItem, Benchmark
@@ -132,7 +132,10 @@ def home(request):
 
 @login_required(login_url='login')
 def build_page(request):
-
+    
+    print("Current User ID:", request.user.id)
+    print("Current Username:", request.user.username)
+    print("Current Email:", request.user.email)
     builds = Build.objects.filter(user=request.user)
 
     build_id = request.GET.get("build")
