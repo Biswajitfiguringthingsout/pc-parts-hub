@@ -40,4 +40,19 @@ urlpatterns = [
         views.compare_builds,
         name="compare_builds",
     ),
+    path(
+    "build/create/",
+    views.create_build,
+    name="create_build",
+    ),
+    path(
+    "build/<int:build_id>/rename/",
+    views.rename_build,
+    name="rename_build",
+    ),
+    path(
+    "build/<int:build_id>/delete/",
+    views.delete_build,
+    name="delete_build",
+    ),
 ]

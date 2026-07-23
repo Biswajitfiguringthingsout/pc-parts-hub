@@ -109,7 +109,7 @@
                     View Details
                 </a>
 
-                <a href="{% url 'add_to_build' product.id %}" class="build-btn">
+                <a href="{% url 'add_to_build' product.id %}?build={{ build.id }}" class="build-btn">
                     Add to Build
                 </a>
             </div>

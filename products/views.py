@@ -9,6 +9,7 @@ from .models import Product, Brand, Build, BuildItem, Benchmark
 from .ai import analyze_build
 from .performance import estimate_performance
 from .compatibility import check_compatibility
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .recommendation_engine import (
     get_installed_components,
@@ -132,14 +133,24 @@ def home(request):
 @login_required(login_url='login')
 def build_page(request):
 
-    builds = Build.objects.all()
+    builds = Build.objects.filter(user=request.user)
 
     build_id = request.GET.get("build")
 
     if build_id:
-        build = get_object_or_404(Build, id=build_id)
+        build = get_object_or_404(
+            Build,
+            id=build_id,
+            user=request.user,
+        )
     else:
         build = builds.first()
+
+        if not build:
+            build = Build.objects.create(
+                user=request.user,
+                name="My First Build",
+            )
 
     items = BuildItem.objects.filter(build=build)
     cpus = Product.objects.filter(category="cpu")
@@ -205,7 +216,7 @@ def build_page(request):
     )
 
     gpus = Product.objects.filter(category="gpu")
-    builds = Build.objects.all()
+    
     return render(
         request,
         "products/build_page.html",
@@ -229,36 +240,51 @@ def build_page(request):
         },
     )
 
-@login_required(login_url='login')
+@login_required(login_url="login")
 def add_to_build(request, product_id):
 
     build_id = request.GET.get("build")
-    build = get_object_or_404(Build, id=build_id)
 
+    # Get the selected build belonging to the logged-in user
     if build_id:
-        build = get_object_or_404(Build, id=build_id)
+        build = get_object_or_404(
+            Build,
+            id=build_id,
+            user=request.user,
+        )
     else:
-        build = Build.objects.first()
+        # Use the user's first build
+        build = Build.objects.filter(
+            user=request.user
+        ).first()
+
+        # Create one if the user has no builds
+        if not build:
+            build = Build.objects.create(
+                user=request.user,
+                name="My First Build",
+            )
 
     product = get_object_or_404(
         Product,
-        id=product_id
+        id=product_id,
     )
 
     single_component_categories = [
-        'cpu',
-        'gpu',
-        'motherboard',
-        'case',
-        'psu',
-        'cooler'
+        "cpu",
+        "gpu",
+        "motherboard",
+        "case",
+        "psu",
+        "cooler",
     ]
 
+    # Replace existing component if only one is allowed
     if product.category.lower() in single_component_categories:
 
         existing_item = BuildItem.objects.filter(
             build=build,
-            product__category=product.category
+            product__category=product.category,
         ).first()
 
         if existing_item:
@@ -266,10 +292,12 @@ def add_to_build(request, product_id):
 
     BuildItem.objects.create(
         build=build,
-        product=product
+        product=product,
     )
 
-    return redirect(f"/products/build/?build={build.id}")
+    return redirect(
+        f"{reverse('build_page')}?build={build.id}"
+    )
 
 @login_required(login_url='login')
 def remove_build_item(request, item_id):
@@ -547,3 +575,59 @@ def calculate_build_stats(build):
     stats["productivity"] = round(productivity)
 
     return stats
+@login_required(login_url="login")
+def create_build(request):
+
+    count = Build.objects.filter(
+        user=request.user
+    ).count()
+
+    build = Build.objects.create(
+        user=request.user,
+        name=f"My Build {count + 1}",
+    )
+
+    return redirect(
+        f"{reverse('build_page')}?build={build.id}"
+    )
+@login_required(login_url="login")
+def rename_build(request, build_id):
+
+    build = get_object_or_404(
+        Build,
+        id=build_id,
+        user=request.user,
+    )
+
+    if request.method == "POST":
+
+        name = request.POST.get("name")
+
+        if name:
+            build.name = name
+            build.save()
+
+    return redirect(
+        f"{reverse('build_page')}?build={build.id}"
+    )
+@login_required(login_url="login")
+def delete_build(request, build_id):
+
+    build = get_object_or_404(
+        Build,
+        id=build_id,
+        user=request.user,
+    )
+
+    build.delete()
+
+    first_build = Build.objects.filter(
+        user=request.user
+    ).first()
+
+    if first_build:
+        return redirect(
+            f"{reverse('build_page')}?build={first_build.id}"
+        )
+
+    return redirect("build_page")

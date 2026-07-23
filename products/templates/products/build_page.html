@@ -3,6 +3,43 @@
 
 {% block content %}
 
+<div class="build-manager">
+    <div class="build-list">
+        {% for b in builds %}
+            <div class="build-item">
+                <a
+                    href="{% url 'build_page' %}?build={{ b.id }}"
+                    class="build-pill {% if b.id == build.id %}active-build{% endif %}"
+                >
+                    {{ b.name }}
+                </a>
+
+                <button
+                    class="icon-btn"
+                    onclick="renameBuild('{{ b.id }}','{{ b.name }}')"
+                >
+                    ✏
+                </button>
+
+                <a
+                    href="{% url 'delete_build' b.id %}"
+                    class="icon-btn delete-btn"
+                    onclick="return confirm('Delete {{ b.name }}?')"
+                >
+                    🗑
+                </a>
+            </div>
+        {% endfor %}
+
+        <a
+            href="{% url 'create_build' %}"
+            class="new-build-btn"
+        >
+            + New Build
+        </a>
+    </div>
+</div>
+
 <div class="builder-header">
     <div class="header-left">
         <button id="sidebarToggle" class="menu-btn">
@@ -863,6 +900,25 @@ if (compareBuildButton && buildComparisonResult) {
 
     });
 
+}
+
+function renameBuild(id, oldName) {
+    const newName = prompt("Rename build", oldName);
+
+    if (!newName) {
+        return;
+    }
+
+    fetch(`/products/build/${id}/rename/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: `name=${encodeURIComponent(newName)}`
+    }).then(() => {
+        location.reload();
+    });
 }
 </script>
 
